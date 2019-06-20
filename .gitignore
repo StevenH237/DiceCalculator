@@ -1,0 +1,10 @@
+.settings/
+target/
+.classpath
+.project
+
+# keys.json will hold Discord API keys
+keys.json
+
+# config.json will hold specific configuration for a dicebot instance
+config.json
