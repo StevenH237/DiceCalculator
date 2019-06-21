@@ -7,6 +7,11 @@ public class Operators {
   private static HashMap<String, Operation> prefixOperators;
   private static HashMap<String, Operation> postfixOperators;
   private static HashMap<String, Operation> binaryOperators;
+  
+  public final static String prefixRegex;
+  public final static String postfixRegex;
+  public final static String binaryRegex;
+  public final static String combinedRegex;
 
   static {
     prefixOperators = new HashMap<>();
@@ -24,7 +29,10 @@ public class Operators {
     binaryOperators.put("*", null);
     binaryOperators.put("/", null);
 
-
+    prefixRegex = keysToPattern(prefixOperators);
+    postfixRegex = keysToPattern(postfixOperators);
+    binaryRegex = keysToPattern(binaryOperators);
+    combinedRegex = "(" + prefixRegex + "*)" + binaryRegex + "(" + postfixRegex + "*)";
   }
 
   private static String keysToPattern(HashMap<String, ?> map) {
