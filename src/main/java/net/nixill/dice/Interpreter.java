@@ -35,30 +35,50 @@ public class Interpreter {
   private static ArrayList<ExpressionPiece> split(String input) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
     String last = "";
+    int pos = 0;
 
     // These regexes give individual pieces of the expression
     Matcher mtcNumber = Pattern.compile("(0|1-9\\d*)(\\.\\d+)?").matcher("");
     Matcher mtcOperator = Pattern.compile("[a-z\\<\\>\\/\\?\\|\\~\\!\\#\\$\\%\\^\\&\\*\\-\\=\\+]+").matcher("");
     Matcher mtcSeparator = Pattern.compile("[\\(\\)\\[\\]\\,]").matcher("");
-    Matcher mtcEnder = Pattern.compile("[\\@\\:\\']").matcher("");
     Matcher mtcName = Pattern.compile("\\{\\$?[a-z][a-z\\_\\-0-9]*[a-z0-9]\\}").matcher("");
 
     while (!input.isEmpty()) {
+      int add = 0;
+      
       // See if it's a number first
       mtcNumber.reset(input);
       if (mtcNumber.lookingAt()) {
         out.add(new ExpressionPiece(mtcNumber.group(), ExpressionPieceType.NUMBER));
-        input = input.substring(mtcNumber.end());
+        add = mtcNumber.end();
       }
 
       // A separator second
       mtcSeparator.reset(input);
       if (mtcSeparator.lookingAt()) {
-        out.add(new ExpressionPiece(mtcNumber.group(), ExpressionPieceType.BRACKET));
-        input = input.substring(mtcSeparator.end());
+        out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET));
+        add = mtcSeparator.end();
       }
 
+      // A name third
+      mtcName.reset(input);
+      if (mtcName.lookingAt()) {
+        out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME));
+        add = mtcName.end();
+      }
 
+      // And lastly, an operator (or combination thereof)
+      mtcOperator.reset(input);
+      if (mtcOperator.lookingAt()) {
+        String opers = mtcOperator.group();
+        add = mtcName.end();
+
+        boolean prefix = false;
+      }
+    
+      input = input.substring(add);
+      pos += add;
+        
     }
 
     return out;
