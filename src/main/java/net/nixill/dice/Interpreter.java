@@ -32,7 +32,7 @@ public class Interpreter {
    * @param input The string to split
    * @return The split string
    */
-  private static ArrayList<ExpressionPiece> split(String input) {
+  public static ArrayList<ExpressionPiece> split(String input) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
     String last = "";
     int pos = 0;
@@ -49,13 +49,15 @@ public class Interpreter {
       // See if it's a number first
       mtcNumber.reset(input);
       if (mtcNumber.lookingAt()) {
-        out.add(new ExpressionPiece(mtcNumber.group(), ExpressionPieceType.NUMBER));
+        last = mtcNumber.group();
+        out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER));
         add = mtcNumber.end();
       }
 
       // A separator second
       mtcSeparator.reset(input);
       if (mtcSeparator.lookingAt()) {
+        last = mtcSeparator.group();
         out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET));
         add = mtcSeparator.end();
       }
@@ -63,6 +65,7 @@ public class Interpreter {
       // A name third
       mtcName.reset(input);
       if (mtcName.lookingAt()) {
+        last = mtcName.group();
         out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME));
         add = mtcName.end();
       }
@@ -70,12 +73,23 @@ public class Interpreter {
       // And lastly, an operator (or combination thereof)
       mtcOperator.reset(input);
       if (mtcOperator.lookingAt()) {
+        last = mtcOperator.group();
         String opers = mtcOperator.group();
         add = mtcName.end();
 
-        boolean prefix = false;
-        
-        
+        String next;
+        if (input.length() == add) {
+          next = "";
+        } else {
+          next = input.substring(add, 1);
+        }
+
+        boolean prefix = (last.equals("(") || last.equals("[") || last.equals(",") || last.equals(""));
+        boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
+
+        if (prefix && postfix) {
+          
+        }
       }
     
       input = input.substring(add);
