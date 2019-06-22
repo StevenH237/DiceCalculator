@@ -3,10 +3,12 @@ package net.nixill.dice;
 public class ExpressionPiece {
   public final String contents;
   public final ExpressionPieceType type;
+  public final int position;
 
-  public ExpressionPiece(String contents, ExpressionPieceType type) {
+  public ExpressionPiece(String contents, ExpressionPieceType type, int pos) {
     this.contents = contents;
     this.type = type;
+    this.position = pos;
   }
 
   public enum ExpressionPieceType {

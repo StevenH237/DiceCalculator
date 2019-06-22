@@ -44,4 +44,6 @@ public class Operators {
     out = "(" + out.substring(1) + ")";
     return out;
   }
+  
+  public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, 
 }

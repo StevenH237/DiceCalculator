@@ -50,7 +50,7 @@ public class Interpreter {
       mtcNumber.reset(input);
       if (mtcNumber.lookingAt()) {
         last = mtcNumber.group();
-        out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER));
+        out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER, pos));
         add = mtcNumber.end();
       }
 
@@ -58,7 +58,7 @@ public class Interpreter {
       mtcSeparator.reset(input);
       if (mtcSeparator.lookingAt()) {
         last = mtcSeparator.group();
-        out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET));
+        out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET, pos));
         add = mtcSeparator.end();
       }
 
@@ -66,7 +66,7 @@ public class Interpreter {
       mtcName.reset(input);
       if (mtcName.lookingAt()) {
         last = mtcName.group();
-        out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME));
+        out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME, pos));
         add = mtcName.end();
       }
 
@@ -88,8 +88,10 @@ public class Interpreter {
         boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
 
         if (prefix && postfix) {
-          
+          throw new UserInputError("A number was expected here.", pos);
         }
+        
+        List<ExpressionPiece> pcs = Operators.getPieces(opers, prefix, postfix, pos);
       }
     
       input = input.substring(add);
