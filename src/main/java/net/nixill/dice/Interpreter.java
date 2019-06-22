@@ -88,7 +88,7 @@ public class Interpreter {
         boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
 
         if (prefix && postfix) {
-          throw new UserInputError("A number was expected here.", pos);
+          throw new UserInputException("A number was expected here.", pos);
         }
         
         List<ExpressionPiece> pcs = Operators.getPieces(opers, prefix, postfix, pos);

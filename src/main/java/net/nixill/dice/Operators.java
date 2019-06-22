@@ -1,6 +1,8 @@
 package net.nixill.dice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class Operators {
@@ -45,5 +47,18 @@ public class Operators {
     return out;
   }
   
-  public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, 
+  public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, int startPos) {
+    ArrayList<ExpressionPiece> out = new ArrayList<>();
+
+    if (prefix || postfix) {
+      String ptn;
+      if (prefix) {
+        ptn = prefixRegex;
+      } else {
+        ptn = postfixRegex;
+      }
+    }
+
+    return out;
+  }
 }
