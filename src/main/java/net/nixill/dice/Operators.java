@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.nixill.dice.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
   private static HashMap<String, Operation> prefixOperators;
@@ -14,6 +17,10 @@ public class Operators {
   public final static String postfixRegex;
   public final static String binaryRegex;
   public final static String combinedRegex;
+
+  public final static Pattern ptnPrefix;
+  public final static Pattern ptnPostfix;
+  public final static Pattern ptnCombined;
 
   static {
     prefixOperators = new HashMap<>();
@@ -35,6 +42,10 @@ public class Operators {
     postfixRegex = keysToPattern(postfixOperators);
     binaryRegex = keysToPattern(binaryOperators);
     combinedRegex = "(" + prefixRegex + "*)" + binaryRegex + "(" + postfixRegex + "*)";
+
+    ptnPrefix = Pattern.compile(prefixRegex);
+    ptnPostfix = Pattern.compile(postfixRegex);
+    ptnCombined = Pattern.compile(combinedRegex);
   }
 
   private static String keysToPattern(HashMap<String, ?> map) {
@@ -49,13 +60,25 @@ public class Operators {
   
   public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, int startPos) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
-
-    if (prefix || postfix) {
-      String ptn;
-      if (prefix) {
-        ptn = prefixRegex;
+    
+    Matcher mtcPrefix = null;
+    Matcher mtcPostfix = null;
+    String midString = null;
+    
+    if (!(prefix || postfix)) {
+      Matcher mtcCombined = ptnCombined.matcher(opers);
+      if (mtcCombined.matches()) {
+        mtcPrefix = ptnPrefix.matcher(mtcCombined.group(1));
+        mtcPostfix = ptnPostfix.matcher(mtcCombined.group(4));
+        midString = mtcCombined.group(3);
       } else {
-        ptn = postfixRegex;
+        throw new UserInputException("Operator " + opers + " isn't recognized.", startPos);
+      }
+    } else {
+      if (prefix) {
+        mtcPrefix = ptnPrefix.matcher(opers);
+      } else {
+        mtcPostfix = ptnPostfix.matcher(opers);
       }
     }
 
