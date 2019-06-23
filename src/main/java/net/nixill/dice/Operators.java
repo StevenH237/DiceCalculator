@@ -60,28 +60,56 @@ public class Operators {
   
   public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, int startPos) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
+
+    int pos = startPos;
     
     Matcher mtcPrefix = null;
     Matcher mtcPostfix = null;
     String midString = null;
     
+    // Split the operator string into postfixes, in-between, and prefixes.
     if (!(prefix || postfix)) {
       Matcher mtcCombined = ptnCombined.matcher(opers);
       if (mtcCombined.matches()) {
-        mtcPrefix = ptnPrefix.matcher(mtcCombined.group(1));
         mtcPostfix = ptnPostfix.matcher(mtcCombined.group(4));
+        mtcPrefix = ptnPrefix.matcher(mtcCombined.group(1));
         midString = mtcCombined.group(3);
       } else {
         throw new UserInputException("Operator " + opers + " isn't recognized.", startPos);
       }
     } else {
-      if (prefix) {
-        mtcPrefix = ptnPrefix.matcher(opers);
-      } else {
+      if (postfix) {
         mtcPostfix = ptnPostfix.matcher(opers);
+      } else {
+        mtcPrefix = ptnPrefix.matcher(opers);
       }
     }
 
+    // Get the postfixes first
+    if (postfix || !prefix) {
+      pos = getMultiOpers(out, mtcPostfix, pos, true);
+    }
+
+    if (!postfix && !prefix) {
+      out.add(new ExpressionPiece(midString, ExpressionPieceType.BINARY_OPERATOR, pos));
+      pos += midString.length();
+    }
+
+    if (prefix || !postfix) {
+      getMultiOpers(out, mtcPrefix, pos, false);
+    }
+
     return out;
+  }
+
+  private static int getMultiOpers(List<ExpressionPiece> list, Matcher matcher, int pos, boolean post) {
+    while (matcher.lookingAt()) {
+      list.add(new ExpressionPiece(matcher.group(),
+        (post)?ExpressionPieceType.POSTFIX_OPERATOR:
+          ExpressionPieceType.PREFIX_OPERATOR,
+        pos));
+      pos += matcher.end();
+    }
+    return pos;
   }
 }

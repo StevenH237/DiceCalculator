@@ -45,6 +45,8 @@ public class Interpreter {
 
     while (!input.isEmpty()) {
       int add = 0;
+
+      boolean matched = false;
       
       // See if it's a number first
       mtcNumber.reset(input);
@@ -52,6 +54,8 @@ public class Interpreter {
         last = mtcNumber.group();
         out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER, pos));
         add = mtcNumber.end();
+
+        matched = true;
       }
 
       // A separator second
@@ -60,6 +64,8 @@ public class Interpreter {
         last = mtcSeparator.group();
         out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET, pos));
         add = mtcSeparator.end();
+        
+        matched = true;
       }
 
       // A name third
@@ -68,6 +74,8 @@ public class Interpreter {
         last = mtcName.group();
         out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME, pos));
         add = mtcName.end();
+        
+        matched = true;
       }
 
       // And lastly, an operator (or combination thereof)
@@ -91,12 +99,17 @@ public class Interpreter {
           throw new UserInputException("A number was expected here.", pos);
         }
         
-        List<ExpressionPiece> pcs = Operators.getPieces(opers, prefix, postfix, pos);
+        List<ExpressionPiece> pcs = Operators.getOpers(opers, prefix, postfix, pos);
+        
+        matched = true;
+      }
+
+      if (!matched) {
+        throw new UserInputException("I don't know what this means.", pos);
       }
     
       input = input.substring(add);
       pos += add;
-        
     }
 
     return out;
