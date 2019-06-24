@@ -18,6 +18,8 @@ public class AppTest {
     testLine("2*(-1+5)");
     testLine("2**5");
     testLine("2+[1,2,3]");
+    testLine("[1,(1+1),(1-1)]");
+    testLine("{stats}*6");
   }
 
   public void printExpList(ArrayList<ExpressionPiece> list) {
