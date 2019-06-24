@@ -91,13 +91,17 @@ public class Interpreter {
             next = input.substring(add, add+1);
           }
 
+          // If the operator immediately follows an opening bracket, it can only be a prefix operator.
           boolean prefix = (last.equals("(") || last.equals("[") || last.equals(",") || last.equals(""));
+          // If the operator immediately precedes a closing bracket, it can only be a postfix operator.
           boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
 
+          // An operator can't be both (i.e. the only thing between two brackets).
           if (prefix && postfix) {
             throw new UserInputException("A number was expected here.", pos);
           }
           
+          // Multiple operators might be in a row, so get them all.
           List<ExpressionPiece> pcs = Operators.getOpers(opers, prefix, postfix, pos);
           out.addAll(pcs);
           
@@ -116,4 +120,6 @@ public class Interpreter {
 
     return out;
   }
+
+
 }
