@@ -40,8 +40,8 @@ public class Interpreter {
     // These regexes give individual pieces of the expression
     Matcher mtcNumber = Pattern.compile("(0|[1-9]\\d*)(\\.\\d+)?").matcher("");
     Matcher mtcOperator = Pattern.compile("[a-z\\<\\>\\/\\?\\|\\~\\!\\#\\$\\%\\^\\&\\*\\-\\=\\+]+").matcher("");
-    Matcher mtcSeparator = Pattern.compile("[\\(\\)\\[\\]\\,]").matcher("");
-    Matcher mtcName = Pattern.compile("\\{\\$?[a-z][a-z\\_\\-0-9]*[a-z0-9]\\}").matcher("");
+    Matcher mtcSeparator = Pattern.compile("[\\(\\)\\[\\]\\,\\}]").matcher("");
+    Matcher mtcName = Pattern.compile("\\{([\\$\\_\\^]?[a-z][a-z\\_\\-0-9]*[a-z0-9]|\\d+)").matcher("");
 
     while (!input.isEmpty()) {
       int add = 0;
