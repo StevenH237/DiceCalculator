@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import net.nixill.dice.ExpressionPiece;
-import net.nixill.dice.Interpreter;
+import net.nixill.dice.ExpressionSplitter;
 import net.nixill.dice.UserInputException;
 
 public class AppTest {
@@ -39,7 +39,7 @@ public class AppTest {
   public void testLine(String input) {
     try {
       System.out.println("For input: " + input);
-      printExpList(Interpreter.split(input));
+      printExpList(ExpressionSplitter.split(input));
       System.out.println("\u200b");
     } catch (UserInputException ex) {
       System.err.println(ex.getMessage());
