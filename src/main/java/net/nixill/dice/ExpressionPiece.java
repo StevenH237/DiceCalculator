@@ -11,12 +11,20 @@ public class ExpressionPiece {
     this.position = pos;
   }
 
+  public String toString() {
+    return type.type + ":" + contents + "(" + position + ")";
+  }
+
   public enum ExpressionPieceType {
-    NUMBER, // a literal number
-    BRACKET, // ()[],
-    PREFIX_OPERATOR, // a prefix operator
-    BINARY_OPERATOR, // a binary operator
-    POSTFIX_OPERATOR, // a postfix operator
-    NAME; // a saved name, including the brackets
+    NUMBER("num"), // a literal number
+    BRACKET("br"), // ()[],
+    PREFIX_OPERATOR("pre"), // a prefix operator
+    BINARY_OPERATOR("bin"), // a binary operator
+    POSTFIX_OPERATOR("post"), // a postfix operator
+    NAME("name"); // a saved name, including the brackets
+    private final String type;
+    private ExpressionPieceType(String t) {
+      type = t;
+    }
   }
 }

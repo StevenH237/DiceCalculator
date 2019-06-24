@@ -38,7 +38,7 @@ public class Interpreter {
     int pos = 0;
 
     // These regexes give individual pieces of the expression
-    Matcher mtcNumber = Pattern.compile("(0|1-9\\d*)(\\.\\d+)?").matcher("");
+    Matcher mtcNumber = Pattern.compile("(0|[1-9]\\d*)(\\.\\d+)?").matcher("");
     Matcher mtcOperator = Pattern.compile("[a-z\\<\\>\\/\\?\\|\\~\\!\\#\\$\\%\\^\\&\\*\\-\\=\\+]+").matcher("");
     Matcher mtcSeparator = Pattern.compile("[\\(\\)\\[\\]\\,]").matcher("");
     Matcher mtcName = Pattern.compile("\\{\\$?[a-z][a-z\\_\\-0-9]*[a-z0-9]\\}").matcher("");
@@ -46,65 +46,67 @@ public class Interpreter {
     while (!input.isEmpty()) {
       int add = 0;
 
-      boolean matched = false;
-      
-      // See if it's a number first
-      mtcNumber.reset(input);
-      if (mtcNumber.lookingAt()) {
-        last = mtcNumber.group();
-        out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER, pos));
-        add = mtcNumber.end();
+      // this feels like bad practice but fuck it
+      while (true) {
+        // See if it's a number first
+        mtcNumber.reset(input);
+        if (mtcNumber.lookingAt()) {
+          last = mtcNumber.group();
+          out.add(new ExpressionPiece(last, ExpressionPieceType.NUMBER, pos));
+          add = mtcNumber.end();
 
-        matched = true;
-      }
-
-      // A separator second
-      mtcSeparator.reset(input);
-      if (mtcSeparator.lookingAt()) {
-        last = mtcSeparator.group();
-        out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET, pos));
-        add = mtcSeparator.end();
-        
-        matched = true;
-      }
-
-      // A name third
-      mtcName.reset(input);
-      if (mtcName.lookingAt()) {
-        last = mtcName.group();
-        out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME, pos));
-        add = mtcName.end();
-        
-        matched = true;
-      }
-
-      // And lastly, an operator (or combination thereof)
-      mtcOperator.reset(input);
-      if (mtcOperator.lookingAt()) {
-        last = mtcOperator.group();
-        String opers = mtcOperator.group();
-        add = mtcName.end();
-
-        String next;
-        if (input.length() == add) {
-          next = "";
-        } else {
-          next = input.substring(add, 1);
+          break;
         }
 
-        boolean prefix = (last.equals("(") || last.equals("[") || last.equals(",") || last.equals(""));
-        boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
-
-        if (prefix && postfix) {
-          throw new UserInputException("A number was expected here.", pos);
+        // A separator second
+        mtcSeparator.reset(input);
+        if (mtcSeparator.lookingAt()) {
+          last = mtcSeparator.group();
+          out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET, pos));
+          add = mtcSeparator.end();
+          
+          break;
         }
-        
-        List<ExpressionPiece> pcs = Operators.getOpers(opers, prefix, postfix, pos);
-        
-        matched = true;
-      }
 
-      if (!matched) {
+        // A name third
+        mtcName.reset(input);
+        if (mtcName.lookingAt()) {
+          last = mtcName.group();
+          out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME, pos));
+          add = mtcName.end();
+          
+          break;
+        }
+
+        // And lastly, an operator (or combination thereof)
+        mtcOperator.reset(input);
+        if (mtcOperator.lookingAt()) {
+          String opers = mtcOperator.group();
+          add = mtcOperator.end();
+
+          String next;
+          if (input.length() == add) {
+            next = "";
+          } else {
+            next = input.substring(add, add+1);
+          }
+
+          boolean prefix = (last.equals("(") || last.equals("[") || last.equals(",") || last.equals(""));
+          boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
+
+          if (prefix && postfix) {
+            throw new UserInputException("A number was expected here.", pos);
+          }
+          
+          List<ExpressionPiece> pcs = Operators.getOpers(opers, prefix, postfix, pos);
+          out.addAll(pcs);
+          
+          last = mtcOperator.group();
+
+          break;
+        }
+
+        // If no match and it reaches this point:
         throw new UserInputException("I don't know what this means.", pos);
       }
     

@@ -2,6 +2,7 @@
 target/
 .classpath
 .project
+.vscode/
 
 # keys.json will hold Discord API keys
 keys.json

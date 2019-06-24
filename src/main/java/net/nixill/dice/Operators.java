@@ -37,11 +37,12 @@ public class Operators {
     binaryOperators.put("-", null);
     binaryOperators.put("*", null);
     binaryOperators.put("/", null);
+    binaryOperators.put("**", null); // exponentiation
 
     prefixRegex = keysToPattern(prefixOperators);
     postfixRegex = keysToPattern(postfixOperators);
     binaryRegex = keysToPattern(binaryOperators);
-    combinedRegex = "(" + prefixRegex + "*)" + binaryRegex + "(" + postfixRegex + "*)";
+    combinedRegex = "(" + postfixRegex + "*)" + binaryRegex + "(" + prefixRegex + "*)";
 
     ptnPrefix = Pattern.compile(prefixRegex);
     ptnPostfix = Pattern.compile(postfixRegex);
@@ -51,7 +52,7 @@ public class Operators {
   private static String keysToPattern(HashMap<String, ?> map) {
     String out = "";
     for (String str : map.keySet()) {
-      out += "|" + str.replaceAll("[^a-zA-Z0-9]", Matcher.quoteReplacement("\\$1"));
+      out += "|" + str.replaceAll("([^a-zA-Z0-9])", Matcher.quoteReplacement("\\") + "$1");
     }
 
     out = "(" + out.substring(1) + ")";
@@ -71,8 +72,8 @@ public class Operators {
     if (!(prefix || postfix)) {
       Matcher mtcCombined = ptnCombined.matcher(opers);
       if (mtcCombined.matches()) {
-        mtcPostfix = ptnPostfix.matcher(mtcCombined.group(4));
-        mtcPrefix = ptnPrefix.matcher(mtcCombined.group(1));
+        mtcPostfix = ptnPostfix.matcher(mtcCombined.group(1));
+        mtcPrefix = ptnPrefix.matcher(mtcCombined.group(4));
         midString = mtcCombined.group(3);
       } else {
         throw new UserInputException("Operator " + opers + " isn't recognized.", startPos);
@@ -109,6 +110,7 @@ public class Operators {
           ExpressionPieceType.PREFIX_OPERATOR,
         pos));
       pos += matcher.end();
+      matcher.region(matcher.end(), matcher.regionEnd());
     }
     return pos;
   }
