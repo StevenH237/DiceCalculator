@@ -1,4 +1,4 @@
-package net.nixill.dice;
+package net.nixill.dice.parsing;
 
 public class UserInputException extends RuntimeException {
   private static final long serialVersionUID = 1L;

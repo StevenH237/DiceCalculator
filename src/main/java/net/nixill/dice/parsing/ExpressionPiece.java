@@ -1,4 +1,4 @@
-package net.nixill.dice;
+package net.nixill.dice.parsing;
 
 public class ExpressionPiece {
   public final String contents;

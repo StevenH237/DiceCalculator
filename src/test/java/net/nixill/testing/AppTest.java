@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import net.nixill.dice.ExpressionPiece;
-import net.nixill.dice.ExpressionSplitter;
-import net.nixill.dice.UserInputException;
+import net.nixill.dice.parsing.ExpressionPiece;
+import net.nixill.dice.parsing.ExpressionSplitter;
+import net.nixill.dice.parsing.UserInputException;
 
 public class AppTest {
   @Test
