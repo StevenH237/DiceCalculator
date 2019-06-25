@@ -1,4 +1,4 @@
-package net.nixill.dice;
+package net.nixill.dice.parsing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.nixill.dice.ExpressionPiece.ExpressionPieceType;
+import net.nixill.dice.Operation;
+import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
   private static HashMap<String, Operation> prefixOperators;

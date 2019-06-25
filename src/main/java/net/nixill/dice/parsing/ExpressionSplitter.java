@@ -1,16 +1,16 @@
-package net.nixill.dice;
+package net.nixill.dice.parsing;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.nixill.dice.ExpressionPiece.ExpressionPieceType;
+import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
+import net.nixill.dice.objects.DCExpression;
 
 public class ExpressionSplitter {
 
-  public static Expression parse(String input) {
+  public static DCExpression parse(String input) {
     input = input.toLowerCase();
     input = input.replaceAll("[ `]", "");
 
