@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.nixill.dice.Operation;
+import net.nixill.dice.operations.MathsOperators;
+import net.nixill.dice.operations.Operator;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
-  private static HashMap<String, Operation> prefixOperators;
-  private static HashMap<String, Operation> postfixOperators;
-  private static HashMap<String, Operation> binaryOperators;
+  private static HashMap<String, Operator> prefixOperators;
+  private static HashMap<String, Operator> postfixOperators;
+  private static HashMap<String, Operator> binaryOperators;
   
   public final static String prefixRegex;
   public final static String postfixRegex;
@@ -28,17 +29,15 @@ public class Operators {
     postfixOperators = new HashMap<>();
     binaryOperators = new HashMap<>();
 
-    // for debug purposes, we'll just use null values
-    // we're just trying to build the expressions right now, not run them
-    prefixOperators.put("-", null);
+    prefixOperators.put("-", MathsOperators.NEGATIVE);
 
-    postfixOperators.put("!", null);
+    postfixOperators.put("!", MathsOperators.FACTORIAL);
 
-    binaryOperators.put("+", null);
-    binaryOperators.put("-", null);
-    binaryOperators.put("*", null);
-    binaryOperators.put("/", null);
-    binaryOperators.put("**", null); // exponentiation
+    binaryOperators.put("+", MathsOperators.PLUS);
+    binaryOperators.put("-", MathsOperators.MINUS);
+    binaryOperators.put("*", MathsOperators.TIMES);
+    binaryOperators.put("/", MathsOperators.DIVIDE);
+    binaryOperators.put("**", MathsOperators.POWER);
 
     prefixRegex = keysToPattern(prefixOperators);
     postfixRegex = keysToPattern(postfixOperators);

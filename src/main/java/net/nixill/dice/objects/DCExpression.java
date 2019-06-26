@@ -1,5 +1,5 @@
 package net.nixill.dice.objects;
 
-public class DCExpression {
+public abstract class DCExpression extends DCEntity {
   
 }
