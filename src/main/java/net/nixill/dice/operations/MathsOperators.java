@@ -16,9 +16,9 @@ public class MathsOperators {
   public static final BinaryOperator<DCNumber> POWER =
     new BinaryOperator<>("^", Priorities.POWER, null);
   
-  public static final UnaryOperator<DCList> NEGATIVE =
-    new UnaryOperator<>("-", Priorities.NEGATIVE, null);
+  public static final PrefixOperator<DCList> NEGATIVE =
+    new PrefixOperator<>("-", Priorities.NEGATIVE, null);
   
-  public static final UnaryOperator<DCList> FACTORIAL =
-    new UnaryOperator<>("!", Priorities.FACTORIAL, null);
+  public static final PostfixOperator<DCList> FACTORIAL =
+    new PostfixOperator<>("!", Priorities.FACTORIAL, null);
 }

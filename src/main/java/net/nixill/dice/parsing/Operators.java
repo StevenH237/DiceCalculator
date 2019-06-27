@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.MathsOperators;
-import net.nixill.dice.operations.Operator;
+import net.nixill.dice.operations.PostfixOperator;
+import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
-  private static HashMap<String, Operator> prefixOperators;
-  private static HashMap<String, Operator> postfixOperators;
-  private static HashMap<String, Operator> binaryOperators;
+  private static HashMap<String, PrefixOperator<?>> prefixOperators;
+  private static HashMap<String, PostfixOperator<?>> postfixOperators;
+  private static HashMap<String, BinaryOperator<?>> binaryOperators;
   
   public final static String prefixRegex;
   public final static String postfixRegex;
@@ -113,5 +115,17 @@ public class Operators {
       matcher.region(matcher.end(), matcher.regionEnd());
     }
     return pos;
+  }
+
+  public static BinaryOperator<?> getBinaryOperator(String oper) {
+    return binaryOperators.get(oper);
+  }
+
+  public static PrefixOperator<?> getPrefixOperator(String oper) {
+    return prefixOperators.get(oper);
+  }
+
+  public static PostfixOperator<?> getPostfixOperator(String oper) {
+    return postfixOperators.get(oper);
   }
 }
