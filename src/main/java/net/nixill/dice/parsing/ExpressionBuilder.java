@@ -1,6 +1,7 @@
 package net.nixill.dice.parsing;
 
 import net.nixill.dice.objects.DCEntity;
+import net.nixill.dice.objects.DCExpression;
 import net.nixill.dice.operations.Operator;
 
 public class ExpressionBuilder {
@@ -11,38 +12,37 @@ public class ExpressionBuilder {
   private ExpressionBuilder rightExp;
 
   public ExpressionBuilder() {}
-  public ExpressionBuilder(DCEntity left) {
-    leftEnt = left;
-  }
-  public ExpressionBuilder(ExpressionBuilder left) {
-    leftExp = left;
-  }
+
   public ExpressionBuilder(Operator oper) {
     this.oper = oper;
   }
 
-  public void setLeft(DCEntity left) {
-    leftEnt = left;
-    leftExp = null;
-  }
-
-  public void setLeft(ExpressionBuilder left) {
-    leftExp = left;
+  public void setLeft(Object left) {
     leftEnt = null;
+    leftExp = null;
+    if (left instanceof DCEntity) {
+      leftEnt = (DCEntity) left;
+    } else if (left instanceof ExpressionBuilder) {
+      leftExp = (ExpressionBuilder) left;
+    } else if (left != null) {
+      throw new IllegalArgumentException("ExpressionBuilder.setLeft() only accepts null, DCEntity, or ExpressionBuilder.", cause)
+    }
   }
 
   public void setOperator(Operator oper) {
     this.oper = oper;
   }
 
-  public void setRight(DCEntity right) {
-    rightEnt = right;
-    rightExp = null;
-  }
-
-  public void setRight(ExpressionBuilder right) {
-    rightExp = right;
+  public void setRight(Object right) {
     rightEnt = null;
+    rightExp = null;
+    if (right instanceof DCEntity) {
+      rightEnt = (DCEntity) right;
+    } else if (right instanceof ExpressionBuilder) {
+      rightExp = (ExpressionBuilder) right;
+    } else if (right != null) {
+      throw new IllegalArgumentException("ExpressionBuilder.setRight() only accepts null, DCEntity, or ExpressionBuilder.", cause)
+    }
   }
 
   public DCEntity getLeftEnt() { return leftEnt; }
@@ -51,7 +51,25 @@ public class ExpressionBuilder {
   public ExpressionBuilder getRightExp() { return rightExp; }
   public Operator getOper() { return oper; }
 
-  public DCEntity build() {
+  public Object getLeft() {
+    if (leftEnt != null) {
+      return leftEnt;
+    } else {
+      // even if it's null
+      return leftExp;
+    }
+  }
+
+  public Object getRight() {
+    if (rightEnt != null) {
+      return rightEnt;
+    } else {
+      // even if it's null
+      return rightExp;
+    }
+  }
+
+  public DCExpression build() {
     //TODO build this method
   }
 }

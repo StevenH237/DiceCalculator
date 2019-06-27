@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCExpression;
+import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;
@@ -12,7 +13,47 @@ import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class ExpressionParser {
-  public static DCExpression parseLine(ArrayList<ExpressionPiece> pieces) {
+  public static DCEntity parseLine(ArrayList<ExpressionPiece> pieces) {
+    DCEntity ent = parseChain(pieces);
+    if (!pieces.isEmpty()) {
+      ExpressionPiece piece = pieces.get(0);
+      throw new UserInputException("Unmatched " + piece.contents, piece.position);
+    }
+    return ent;
+  }
+
+  private static DCEntity parseParentheses(ArrayList<ExpressionPiece> pieces) {
+    ExpressionPiece lpar = pieces.remove(0);
+    DCEntity ent = parseChain(pieces);
+    if (pieces.isEmpty()) {
+      throw new UserInputException("Unmatched (", lpar.position);
+    } else {
+      ExpressionPiece rpar = pieces.remove(0);
+      if (!rpar.contents.equals(")")) {
+        throw new UserInputException("Unmatched ( and " + rpar.contents, lpar.position);
+      }
+    }
+
+    return ent;
+  }
+
+  private static DCListExpression parseList(ArrayList<ExpressionPiece> pieces) {
+    ExpressionPiece lbracket = pieces.remove(0);
+    ArrayList<DCEntity> listItems = new ArrayList<>();
+
+    // Allow empty lists
+    ExpressionPiece next = pieces.get(0);
+    if (next.contents.equals("]")) {
+      return new DCListExpression(listItems);
+    }
+
+    // Add items to non-empty lists
+    while (!pieces.isEmpty()) {
+      
+    }
+  }
+
+  private static DCEntity parseChain(ArrayList<ExpressionPiece> pieces) {
     if (pieces.isEmpty()) {
       throw new UserInputException("Empty list received.", 0);
     }
@@ -30,13 +71,14 @@ public class ExpressionParser {
           ent = parseParentheses(pieces);
         } else if (piece.contents.equals("[")) {
           ent = parseList(pieces);
-        } else /* ], ), , , */ {
+        } else /* ], ), }, , */ {
           return exps.getFirst().build();
         }
-      } else if (piece.type == ExpressionPieceType.NUMBER) {
-        ent = new DCNumber(Double.parseDouble(piece.contents));
       } else if (piece.type == ExpressionPieceType.NAME) {
         ent = parseFunction(pieces);
+      } else if (piece.type == ExpressionPieceType.NUMBER) {
+        ent = new DCNumber(Double.parseDouble(piece.contents));
+        pieces.remove(0);
       }
 
       // If there is a value, put it in the most recent expression
@@ -115,8 +157,16 @@ public class ExpressionParser {
           exps.addLast(expNext);
         }
       }
+
+      pieces.remove(0);
     }
     
-    return exps.getFirst().build();
+    if (exps.isEmpty()) {
+      return hold;
+    } else {
+      return exps.getFirst().build();
+    }
   }
+
+
 }
