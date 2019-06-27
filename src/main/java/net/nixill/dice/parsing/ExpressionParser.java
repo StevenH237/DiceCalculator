@@ -30,7 +30,7 @@ public class ExpressionParser {
           ent = parseParentheses(pieces);
         } else if (piece.contents.equals("[")) {
           ent = parseList(pieces);
-        } else /* ], ), }, , */ {
+        } else /* ], ), , , */ {
           return exps.getFirst().build();
         }
       } else if (piece.type == ExpressionPieceType.NUMBER) {
@@ -116,5 +116,7 @@ public class ExpressionParser {
         }
       }
     }
+    
+    return exps.getFirst().build();
   }
 }
