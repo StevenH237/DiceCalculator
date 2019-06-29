@@ -33,17 +33,41 @@ public class DCOperation extends DCExpression {
 
   @Override
   public String toString() {
-    return null;
+    if (oper instanceof BinaryOperator) {
+      return left.toString() + oper.getSymbol() + right.toString();
+    } else if (oper instanceof PrefixOperator) {
+      return oper.getSymbol() + right.toString();
+    } else if (oper instanceof PostfixOperator) {
+      return left.toString() + oper.getSymbol();
+    } else {
+      return "";
+    }
   }
 
   @Override
   public String toShortString() {
-    return null;
+    if (oper instanceof BinaryOperator) {
+      return left.toShortString() + oper.getSymbol() + right.toShortString();
+    } else if (oper instanceof PrefixOperator) {
+      return oper.getSymbol() + right.toShortString();
+    } else if (oper instanceof PostfixOperator) {
+      return left.toShortString() + oper.getSymbol();
+    } else {
+      return "";
+    }
   }
 
   @Override
   public String toLongString() {
-    return null;
+    if (oper instanceof BinaryOperator) {
+      return left.toLongString() + oper.getSymbol() + right.toLongString();
+    } else if (oper instanceof PrefixOperator) {
+      return oper.getSymbol() + right.toLongString();
+    } else if (oper instanceof PostfixOperator) {
+      return left.toLongString() + oper.getSymbol();
+    } else {
+      return "";
+    }
   }
   
 }
