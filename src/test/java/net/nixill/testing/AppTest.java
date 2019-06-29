@@ -34,7 +34,6 @@ public class AppTest {
     testLine("{_last}+3");
     testLine("{level,10}");
     testLine("{_ans}+2");
-    testLine("{10}");
   }
 
   public void printExpList(ArrayList<ExpressionPiece> list) {

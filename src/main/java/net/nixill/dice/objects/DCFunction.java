@@ -42,7 +42,9 @@ public class DCFunction extends DCExpression {
       pars.put(i + 1 + "", params.get(i));
     }
 
-    Functions.setFunctions(pars);
+    HashMap<String, DCEntity> preFuncs = Functions.setFunctions(pars);
+    DCValue val = ent.getValue();
+    Functions.setFunctions(preFuncs);
 
     return ent.getValue();
   }
