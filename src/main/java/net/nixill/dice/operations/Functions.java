@@ -8,7 +8,7 @@ import net.nixill.dice.objects.DCEntity;
 public class Functions {
   private static ThreadLocal<HashMap<String, DCEntity>> functionScopes;
   private static ThreadLocal<HashMap<String, DCEntity>> localScopes;
-  private static HashMap<String, DCEntity> globalScopes;
+  private static HashMap<String, DCEntity> globalScopes = new HashMap<>();
   private static ThreadLocal<HashMap<String, DCEntity>> mergedScopes;
 
   static {
