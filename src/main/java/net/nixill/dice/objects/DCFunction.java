@@ -42,7 +42,7 @@ public class DCFunction extends DCExpression {
       pars.put(i + 1 + "", params.get(i));
     }
 
-    Functions.setLocals(pars);
+    Functions.setFunctions(pars);
 
     return ent.getValue();
   }
