@@ -39,7 +39,7 @@ public class Operators {
     binaryOperators.put("-", MathsOperators.MINUS);
     binaryOperators.put("*", MathsOperators.TIMES);
     binaryOperators.put("/", MathsOperators.DIVIDE);
-    binaryOperators.put("**", MathsOperators.POWER);
+    binaryOperators.put("^", MathsOperators.POWER);
 
     prefixRegex = keysToPattern(prefixOperators);
     postfixRegex = keysToPattern(postfixOperators);

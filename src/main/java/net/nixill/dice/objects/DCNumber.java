@@ -21,4 +21,7 @@ public class DCNumber extends DCSingle {
     return toString();
   }
   
+  public void printTree(int level) {
+    printSpaced(level, "Number " + value);
+  }
 }

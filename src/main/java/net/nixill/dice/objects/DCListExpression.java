@@ -2,7 +2,6 @@ package net.nixill.dice.objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 public class DCListExpression extends DCExpression {
   ArrayList<DCEntity> listItems;
@@ -12,15 +11,10 @@ public class DCListExpression extends DCExpression {
   }
 
   @Override
-  public DCList run(HashMap<String, DCEntity> environment) {
+  public DCList getValue() {
     ArrayList<DCValue> vals = new ArrayList<>();
     for (DCEntity ent : listItems) {
-      if (ent instanceof DCExpression) {
-        DCExpression exp = (DCExpression) ent;
-        vals.add(exp.run(environment));
-      } else if (ent instanceof DCValue) {
-        vals.add((DCValue) ent);
-      }
+      vals.add(ent.getValue());
     }
     return new DCList(vals);
   }
@@ -49,5 +43,12 @@ public class DCListExpression extends DCExpression {
     }
     out = out.substring(0, out.length() - 2) + "]";
     return out;
+  }
+
+  public void printTree(int level) {
+    printSpaced(level, "List: " + listItems.size() + " item(s)");
+    for (DCEntity ent : listItems) {
+      ent.printTree(level + 1);
+    }
   }
 }

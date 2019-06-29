@@ -16,9 +16,9 @@ public class DCDie extends DCSingle {
     sides = Math.floor(sides);
     potential = sides;
     if (sides >= 2) {
-      value = (double) (Randomizer.nextInt((int) sides + 1));
+      value = (double) (Randomizer.get().nextInt((int) sides + 1));
     } else if (sides == 1) {
-      value = Randomizer.nextDouble();
+      value = Randomizer.get().nextDouble();
     } else {
       throw new IllegalArgumentException("Dice must have at least one side.");
     }
@@ -31,5 +31,9 @@ public class DCDie extends DCSingle {
 
   public double getSides() {
     return potential;
+  }
+
+  public void printTree(int level) {
+    printSpaced(level, "Die: " + toLongString());
   }
 }

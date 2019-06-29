@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import net.nixill.dice.objects.DCEntity;
+import net.nixill.dice.objects.DCNumber;
+import net.nixill.dice.objects.DCValue;
+import net.nixill.dice.operations.Functions;
 import net.nixill.dice.parsing.ExpressionParser;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
@@ -14,18 +17,21 @@ public class AppTest {
   @Test
   public void tests() {
     System.out.println("-- BEGIN NEW SPLITTER TEST --");
+    Functions.putLocal("_last", new DCNumber(0));
+    Functions.putLocal("_ans", new DCNumber(0));
+    Functions.putLocal("level", ExpressionSplitter.parse("({1,3}^2+{1,3})/2"));
+
     testLine("3");
     testLine("4+2");
     testLine("3/-2");
     testLine("4!/3");
     testLine("2*(-1+5)");
-    testLine("2**5");
+    testLine("2^5");
     testLine("2+[1,2,3]");
     testLine("[1,(1+1),(1-1)]");
-    testLine("{stats}*6");
+    testLine("{level}");
     testLine("{level,5}");
-    testLine("({1}**2+{1})/2");
-    testLine("{$stats,6}");
+    testLine("{level,10}");
     testLine("{_ans}+2");
     testLine("{10}");
   }
@@ -48,7 +54,13 @@ public class AppTest {
 
       // Tree it
       DCEntity exp = ExpressionParser.parseLine(split);
-      System.out.println("Tree toString: " + exp.toString());
+      System.out.println("printTree:");
+      exp.printTree(1);
+
+      // Run it
+      DCValue val = exp.getValue();
+      System.out.println("Value:");
+      val.printTree(1);
 
       System.out.println("\u200b");
     } catch (UserInputException ex) {

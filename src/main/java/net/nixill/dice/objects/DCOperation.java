@@ -1,7 +1,5 @@
 package net.nixill.dice.objects;
 
-import java.util.HashMap;
-
 import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;
@@ -19,13 +17,13 @@ public class DCOperation extends DCExpression {
   }
 
   @Override
-  public DCValue run(HashMap<String, DCEntity> env) {
+  public DCValue getValue() {
     if (oper instanceof BinaryOperator) {
-      return ((BinaryOperator<?>) oper).run(left.getValue(env), right.getValue(env));
+      return ((BinaryOperator<?>) oper).run(left, right);
     } else if (oper instanceof PrefixOperator) {
-      return ((PrefixOperator<?>) oper).run(right.getValue(env));
+      return ((PrefixOperator<?>) oper).run(right);
     } else if (oper instanceof PostfixOperator) {
-      return ((PostfixOperator<?>) oper).run(left.getValue(env));
+      return ((PostfixOperator<?>) oper).run(left);
     } else {
       return null;
     }
@@ -70,4 +68,13 @@ public class DCOperation extends DCExpression {
     }
   }
   
+  public void printTree(int level) {
+    printSpaced(level, "Operator \"" + oper.getSymbol() + "\"");
+    if (left != null) {
+      left.printTree(level + 1);
+    }
+    if (right != null) {
+      right.printTree(level + 1);
+    }
+  }
 }

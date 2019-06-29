@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import net.nixill.dice.operations.Functions;
+import net.nixill.dice.parsing.UserInputException;
+
 public class DCFunction extends DCExpression {
   private ArrayList<DCEntity> params;
   private String name;
@@ -16,8 +19,32 @@ public class DCFunction extends DCExpression {
   }
 
   @Override
-  public DCValue run(HashMap<String, DCEntity> environment) {
-    throw new UnsupportedOperationException("Functions are coming in a future version!");
+  public DCValue getValue() {
+    HashMap<String, DCEntity> funcs = Functions.getAllMerged();
+    
+    DCEntity ent = funcs.get(name);
+
+    if (ent == null) {
+      try {
+        Integer.parseInt(name);
+        if (params.size() >= 1) {
+          ent = params.get(0);
+        } else {
+          throw new UserInputException("Function doesn't have " + name + " param(s).", -1);
+        }
+      } catch (NumberFormatException ex) {
+        throw new UserInputException("Unknown function or variable " + name, -1);
+      }
+    }
+
+    HashMap<String, DCEntity> pars = new HashMap<>();
+    for (int i = 0; i < params.size(); i++) {
+      pars.put(i + 1 + "", params.get(i));
+    }
+
+    Functions.setLocals(pars);
+
+    return ent.getValue();
   }
 
   @Override
@@ -45,5 +72,12 @@ public class DCFunction extends DCExpression {
   
   public List<DCEntity> getParams() {
     return Collections.unmodifiableList(params);
+  }
+
+  public void printTree(int level) {
+    printSpaced(level, "Function \"" + name + "\": " + params.size() + " param(s)");
+    for (DCEntity ent : params) {
+      ent.printTree(level + 1);
+    }
   }
 }
