@@ -250,7 +250,7 @@ public class ExpressionParser {
             expNext.setRight(expNew);
           }
 
-          exps.addLast(expNext);
+          exps.addLast(expNew);
         }
       }
 
