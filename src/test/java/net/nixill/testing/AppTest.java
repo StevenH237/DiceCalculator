@@ -54,6 +54,7 @@ public class AppTest {
     } catch (UserInputException ex) {
       System.err.println(ex.getMessage());
       System.err.println("At position: " + ex.getPosition());
+      throw ex;
     }
   }
 }
