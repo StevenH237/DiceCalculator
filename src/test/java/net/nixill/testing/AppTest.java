@@ -31,6 +31,7 @@ public class AppTest {
     testLine("[1,(1+1),(1-1)]");
     testLine("{level}");
     testLine("{level,5}");
+    testLine("{_last}+3");
     testLine("{level,10}");
     testLine("{_ans}+2");
     testLine("{10}");
@@ -61,6 +62,10 @@ public class AppTest {
       DCValue val = exp.getValue();
       System.out.println("Value:");
       val.printTree(1);
+
+      // Save local variables
+      Functions.putLocal("_last", exp);
+      Functions.putLocal("_ans", val);
 
       System.out.println("\u200b");
     } catch (UserInputException ex) {
