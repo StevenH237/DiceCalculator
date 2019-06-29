@@ -46,7 +46,7 @@ public class DCFunction extends DCExpression {
     DCValue val = ent.getValue();
     Functions.setFunctions(preFuncs);
 
-    return ent.getValue();
+    return val;
   }
 
   @Override
