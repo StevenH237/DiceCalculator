@@ -7,5 +7,9 @@ public abstract class DCExpression extends DCEntity {
     return run(null);
   }
 
-  public abstract DCValue run(HashMap<String, DCExpression> environment);
+  public DCValue getValue(HashMap<String, DCEntity> environment) {
+    return run(environment);
+  }
+
+  public abstract DCValue run(HashMap<String, DCEntity> environment);
 }

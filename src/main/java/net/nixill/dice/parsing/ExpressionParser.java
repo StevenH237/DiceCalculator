@@ -88,7 +88,7 @@ public class ExpressionParser {
     // Allow no-param functions
     ExpressionPiece next = pieces.get(0);
     if (next.contents.equals("}")) {
-      return new DCFunctions(name, params);
+      return new DCFunction(name, params);
     }
 
     // Add items to with-param functions
@@ -129,7 +129,7 @@ public class ExpressionParser {
       throw new UserInputException("Empty list received.", 0);
     }
 
-    ArrayDeque<ExpressionBuilder> exps;
+    ArrayDeque<ExpressionBuilder> exps = new ArrayDeque<>();
     DCEntity hold = null;
     boolean valueLast = false;
 
@@ -174,7 +174,7 @@ public class ExpressionParser {
         throw new UserInputException("Two consecutive values", piece.position);
       }
 
-    // If there is a value, put it in the most recent expression
+      // If there is a value, put it in the most recent expression
       if (ent != null) {
         valueLast = true;
 

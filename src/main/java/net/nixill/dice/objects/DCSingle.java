@@ -23,7 +23,7 @@ public abstract class DCSingle extends DCValue {
     return new DCList(items);
   }
 
-  public double getNumber() {
+  public double getAmount() {
     return value;
   }
 

@@ -4,7 +4,6 @@ import net.nixill.dice.objects.DCList;
 import net.nixill.dice.objects.DCNumber;
 
 public class MathsOperators {
-  //TODO add actual functions
   public static final BinaryOperator<DCList> PLUS =
     new BinaryOperator<>("+", Priorities.PLUS, null);
   public static final BinaryOperator<DCList> MINUS =

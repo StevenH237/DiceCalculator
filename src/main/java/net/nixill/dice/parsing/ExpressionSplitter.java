@@ -5,18 +5,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
-import net.nixill.dice.objects.DCExpression;
 
 public class ExpressionSplitter {
 
-  public static DCExpression parse(String input) {
+  public static DCEntity parse(String input) {
     input = input.toLowerCase();
     input = input.replaceAll("[ `]", "");
 
     ArrayList<ExpressionPiece> stack = split(input);
+    DCEntity ent = ExpressionParser.parseLine(stack);
     
-    return null; //TODO fix stub
+    return ent;
   }
 
   /**

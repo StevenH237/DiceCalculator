@@ -2,6 +2,7 @@ package net.nixill.dice.parsing;
 
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCExpression;
+import net.nixill.dice.objects.DCOperation;
 import net.nixill.dice.operations.Operator;
 
 public class ExpressionBuilder {
@@ -25,7 +26,7 @@ public class ExpressionBuilder {
     } else if (left instanceof ExpressionBuilder) {
       leftExp = (ExpressionBuilder) left;
     } else if (left != null) {
-      throw new IllegalArgumentException("ExpressionBuilder.setLeft() only accepts null, DCEntity, or ExpressionBuilder.", cause)
+      throw new IllegalArgumentException("ExpressionBuilder.setLeft() only accepts null, DCEntity, or ExpressionBuilder.");
     }
   }
 
@@ -41,7 +42,7 @@ public class ExpressionBuilder {
     } else if (right instanceof ExpressionBuilder) {
       rightExp = (ExpressionBuilder) right;
     } else if (right != null) {
-      throw new IllegalArgumentException("ExpressionBuilder.setRight() only accepts null, DCEntity, or ExpressionBuilder.", cause)
+      throw new IllegalArgumentException("ExpressionBuilder.setRight() only accepts null, DCEntity, or ExpressionBuilder.");
     }
   }
 
@@ -70,6 +71,21 @@ public class ExpressionBuilder {
   }
 
   public DCExpression build() {
-    //TODO build this method
+    DCEntity leftSide;
+    DCEntity rightSide;
+
+    if (leftExp != null) {
+      leftSide = leftExp.build();
+    } else {
+      leftSide = leftEnt;
+    }
+
+    if (rightExp != null) {
+      rightSide = rightExp.build();
+    } else {
+      rightSide = rightEnt;
+    }
+
+    return new DCOperation(leftSide, oper, rightSide);
   }
 }

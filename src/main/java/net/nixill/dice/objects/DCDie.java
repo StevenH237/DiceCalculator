@@ -4,6 +4,10 @@ public class DCDie extends DCSingle {
   public DCDie(double sides, double value) {
     sides = Math.floor(sides);
     potential = sides;
+
+    if (sides < 1) {
+      throw new IllegalArgumentException("Dice must have at least one side.");
+    }
     
     this.value = value;
   }
@@ -18,5 +22,14 @@ public class DCDie extends DCSingle {
     } else {
       throw new IllegalArgumentException("Dice must have at least one side.");
     }
+  }
+
+  @Override
+  public String toLongString() {
+    return value + " (d" + potential + ")";
+  }
+
+  public double getSides() {
+    return potential;
   }
 }
