@@ -34,11 +34,11 @@ public class DCOperation extends DCExpression {
   @Override
   public String toString() {
     if (oper instanceof BinaryOperator) {
-      return left.toString() + oper.getSymbol() + right.toString();
+      return "(" + left.toString() + oper.getSymbol() + right.toString() + ")";
     } else if (oper instanceof PrefixOperator) {
-      return oper.getSymbol() + right.toString();
+      return "(" + oper.getSymbol() + right.toString() + ")";
     } else if (oper instanceof PostfixOperator) {
-      return left.toString() + oper.getSymbol();
+      return "(" + left.toString() + oper.getSymbol() + ")";
     } else {
       return "";
     }
@@ -47,11 +47,11 @@ public class DCOperation extends DCExpression {
   @Override
   public String toShortString() {
     if (oper instanceof BinaryOperator) {
-      return left.toShortString() + oper.getSymbol() + right.toShortString();
+      return "(" + left.toShortString() + oper.getSymbol() + right.toShortString() + ")";
     } else if (oper instanceof PrefixOperator) {
-      return oper.getSymbol() + right.toShortString();
+      return "(" + oper.getSymbol() + right.toShortString() + ")";
     } else if (oper instanceof PostfixOperator) {
-      return left.toShortString() + oper.getSymbol();
+      return "(" + left.toShortString() + oper.getSymbol() + ")";
     } else {
       return "";
     }
@@ -60,11 +60,11 @@ public class DCOperation extends DCExpression {
   @Override
   public String toLongString() {
     if (oper instanceof BinaryOperator) {
-      return left.toLongString() + oper.getSymbol() + right.toLongString();
+      return "(" + left.toLongString() + oper.getSymbol() + right.toLongString() + ")";
     } else if (oper instanceof PrefixOperator) {
-      return oper.getSymbol() + right.toLongString();
+      return "(" + oper.getSymbol() + right.toLongString() + ")";
     } else if (oper instanceof PostfixOperator) {
-      return left.toLongString() + oper.getSymbol();
+      return "(" + left.toLongString() + oper.getSymbol() + ")";
     } else {
       return "";
     }
