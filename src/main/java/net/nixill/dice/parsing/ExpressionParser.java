@@ -88,7 +88,12 @@ public class ExpressionParser {
     // Allow no-param functions
     ExpressionPiece next = pieces.get(0);
     if (next.contents.equals("}")) {
+      pieces.remove(0);
       return new DCFunction(name, params);
+    }
+
+    if (next.contents.equals(",")) {
+      pieces.remove(0);
     }
 
     // Add items to with-param functions
