@@ -12,7 +12,6 @@ import net.nixill.dice.parsing.ExpressionParser;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
 import net.nixill.dice.parsing.UserInputException;
->>>>>>> 9e166283a19240e916029897003bfac06e646532
 
 public class AppTest {
   @Test
