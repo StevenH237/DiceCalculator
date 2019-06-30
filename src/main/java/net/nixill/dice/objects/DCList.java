@@ -49,4 +49,15 @@ public class DCList extends DCValue {
     out = out.substring(0, out.length() - 2) + "]";
     return out;
   }
+
+  public ArrayList<DCValue> getItems() {
+    return new ArrayList<>(listItems);
+  }
+
+  public void printTree(int level) {
+    printSpaced(level, "List: " + listItems.size() + " item(s)");
+    for (DCValue val : listItems) {
+      val.printTree(level + 1);
+    }
+  }
 }

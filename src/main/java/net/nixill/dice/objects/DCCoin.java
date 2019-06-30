@@ -6,7 +6,7 @@ public class DCCoin extends DCSingle {
   }
 
   public DCCoin(double potent) {
-    this(potent, Randomizer.nextBoolean());
+    this(potent, Randomizer.get().nextBoolean());
   }
 
   public boolean isHeads() {
@@ -35,5 +35,9 @@ public class DCCoin extends DCSingle {
     } else {
       return "Tails (0)";
     }
+  }
+
+  public void printTree(int level) {
+    printSpaced(level, "Coin: " + toLongString());
   }
 }
