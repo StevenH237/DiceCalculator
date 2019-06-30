@@ -1,4 +1,4 @@
-package net.nixill.dice;
+package net.nixill.dice.parsing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.nixill.dice.ExpressionPiece.ExpressionPieceType;
+import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.MathsOperators;
+import net.nixill.dice.operations.PostfixOperator;
+import net.nixill.dice.operations.PrefixOperator;
+import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
-  private static HashMap<String, Operation> prefixOperators;
-  private static HashMap<String, Operation> postfixOperators;
-  private static HashMap<String, Operation> binaryOperators;
+  private static HashMap<String, PrefixOperator<?>> prefixOperators;
+  private static HashMap<String, PostfixOperator<?>> postfixOperators;
+  private static HashMap<String, BinaryOperator<?>> binaryOperators;
   
   public final static String prefixRegex;
   public final static String postfixRegex;
@@ -27,17 +31,15 @@ public class Operators {
     postfixOperators = new HashMap<>();
     binaryOperators = new HashMap<>();
 
-    // for debug purposes, we'll just use null values
-    // we're just trying to build the expressions right now, not run them
-    prefixOperators.put("-", null);
+    prefixOperators.put("-", MathsOperators.NEGATIVE);
 
-    postfixOperators.put("!", null);
+    postfixOperators.put("!", MathsOperators.FACTORIAL);
 
-    binaryOperators.put("+", null);
-    binaryOperators.put("-", null);
-    binaryOperators.put("*", null);
-    binaryOperators.put("/", null);
-    binaryOperators.put("**", null); // exponentiation
+    binaryOperators.put("+", MathsOperators.PLUS);
+    binaryOperators.put("-", MathsOperators.MINUS);
+    binaryOperators.put("*", MathsOperators.TIMES);
+    binaryOperators.put("/", MathsOperators.DIVIDE);
+    binaryOperators.put("**", MathsOperators.POWER);
 
     prefixRegex = keysToPattern(prefixOperators);
     postfixRegex = keysToPattern(postfixOperators);
@@ -113,5 +115,17 @@ public class Operators {
       matcher.region(matcher.end(), matcher.regionEnd());
     }
     return pos;
+  }
+
+  public static BinaryOperator<?> getBinaryOperator(String oper) {
+    return binaryOperators.get(oper);
+  }
+
+  public static PrefixOperator<?> getPrefixOperator(String oper) {
+    return prefixOperators.get(oper);
+  }
+
+  public static PostfixOperator<?> getPostfixOperator(String oper) {
+    return postfixOperators.get(oper);
   }
 }

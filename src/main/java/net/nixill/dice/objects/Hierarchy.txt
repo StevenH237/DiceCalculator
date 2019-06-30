@@ -1,0 +1,19 @@
+This is the hierarchy of objects in the dice calculator.
+
+DCEntity           - Any entity at all
+├DCExpression      - An expression that can be run
+│├DCOperation      - A simple two- or one-number and one-operator
+││                   expression
+│├DCListExpression - A list of expressions (which is itself an
+││                   expression)
+│└DCFunction       - A named function with a list of parameters
+└DCValue           - A value that can be returned from an expression
+ ├DCList           - A list of values (which is itself a value)
+ └DCSingle         - A single value, with an actual value and a maximum
+  │                  it could be
+  ├DCCoin          - A coin, which is a value of 0 or its maximum (aka
+  │                  the Heads value)
+  ├DCDie           - A die, which is an integer between 1 and its maximum
+  │                  (aka the number of Sides)
+  └DCNumber        - A literal number (with an arbitrarily selected
+                     "maximum")
