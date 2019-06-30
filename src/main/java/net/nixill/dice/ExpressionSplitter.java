@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import net.nixill.dice.ExpressionPiece.ExpressionPieceType;
 
-public class Interpreter {
+public class ExpressionSplitter {
 
   public static Expression parse(String input) {
     input = input.toLowerCase();
@@ -120,6 +120,4 @@ public class Interpreter {
 
     return out;
   }
-
-
 }
