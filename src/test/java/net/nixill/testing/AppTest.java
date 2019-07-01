@@ -7,7 +7,7 @@ import org.junit.Test;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCValue;
-import net.nixill.dice.operations.Functions;
+import net.nixill.dice.operations.SavedFunctions;
 import net.nixill.dice.parsing.ExpressionParser;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
@@ -17,9 +17,9 @@ public class AppTest {
   @Test
   public void tests() {
     System.out.println("-- BEGIN NEW SPLITTER TEST --");
-    Functions.putLocal("_last", new DCNumber(0));
-    Functions.putLocal("_ans", new DCNumber(0));
-    Functions.putLocal("level", ExpressionSplitter.parse("({1,3}^2+{1,3})/2"));
+    SavedFunctions.putLocal("_last", new DCNumber(0));
+    SavedFunctions.putLocal("_ans", new DCNumber(0));
+    SavedFunctions.putLocal("level", ExpressionSplitter.parse("({1,3}^2+{1,3})/2"));
 
     testLine("3");
     testLine("4+2");
@@ -63,8 +63,8 @@ public class AppTest {
       val.printTree(1);
 
       // Save local variables
-      Functions.putLocal("_last", exp);
-      Functions.putLocal("_ans", val);
+      SavedFunctions.putLocal("_last", exp);
+      SavedFunctions.putLocal("_ans", val);
 
       System.out.println("\u200b");
     } catch (UserInputException ex) {

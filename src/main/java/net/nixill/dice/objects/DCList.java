@@ -3,13 +3,23 @@ package net.nixill.dice.objects;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * A list of resolved, unchanging values.
+ */
 public class DCList extends DCValue {
   private ArrayList<DCValue> listItems;
-  
+
+  /**
+   * Creates a new list of values.
+   */
   public DCList(Collection<DCValue> items) {
     listItems = new ArrayList<>(items);
   }
 
+  /**
+   * Casts this DCList to a {@link DCSingle} by taking the sum of all of its
+   * items.
+   */
   @Override
   public DCSingle getSingle() {
     double sum = 0;
@@ -19,9 +29,19 @@ public class DCList extends DCValue {
     return new DCNumber(sum);
   }
 
+  /**
+   * Returns this DCList itself.
+   */
   @Override
   public DCList getList() {
     return this;
+  }
+
+  /**
+   * Returns a new {@link ArrayList} containing this list's items.
+   */
+  public ArrayList<DCValue> getItems() {
+    return new ArrayList<>(listItems);
   }
 
   @Override
@@ -48,10 +68,6 @@ public class DCList extends DCValue {
     }
     out = out.substring(0, out.length() - 2) + "]";
     return out;
-  }
-
-  public ArrayList<DCValue> getItems() {
-    return new ArrayList<>(listItems);
   }
 
   public void printTree(int level) {
