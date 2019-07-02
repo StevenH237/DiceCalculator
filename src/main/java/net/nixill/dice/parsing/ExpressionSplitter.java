@@ -10,12 +10,12 @@ import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 /**
  * A class that takes an input string and splits it into a list of
- * {@link ExpressionPieces}.
+ * {@link ExpressionPiece}s.
  */
 public class ExpressionSplitter {
 
   /**
-   * Runs {@link #split} and {@link ExpressionParser.parseLine} consecutively.
+   * Runs {@link #split} and {@link ExpressionParser#parseLine} consecutively.
    */
   public static DCEntity parse(String input) {
     input = input.toLowerCase();

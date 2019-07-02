@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import net.nixill.dice.objects.DCEntity;
+import net.nixill.dice.objects.DCExpression;
 import net.nixill.dice.objects.DCFunction;
 import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;

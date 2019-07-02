@@ -2,6 +2,7 @@ package net.nixill.dice.operations;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import net.nixill.dice.objects.DCEntity;
 

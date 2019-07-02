@@ -1,5 +1,7 @@
 package net.nixill.dice.parsing;
 
+import net.nixill.dice.objects.DCExpression;
+
 /**
  * Represents a single piece of a {@link DCExpression}.
  */

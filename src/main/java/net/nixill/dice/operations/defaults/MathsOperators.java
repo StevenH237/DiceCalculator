@@ -16,66 +16,69 @@ import net.nixill.dice.operations.PrefixOperator;
  */
 public class MathsOperators {
   /**
-   * The binary "+" operator, which adds two numbers or joins two lists.
-   * <p>
-   * If both operands are {@link DCSingle}s (numbers), this operator returns a
-   * {@link DCNumber} which is the sum of both of the operands. In any other case,
-   * it returns a single {@link DCList} consisting of both operands (as lists)
-   * joined together.
-   * <p>
-   * For the operator's function:
-   * 
-   * @param left  A number or list to start with
-   * @param right The number or list to be added to left
-   * @return The DCNumber or DCList summing both, as described above.
+   * The binary "+" operator, which joins two lists.
+   * <ul>
+   * <li><code>left</code> operand - list: A starting list</li>
+   * <li><code>right</code> operand - list: The list to join to
+   * <code>left</code>.</li>
+   * <li>Returns - list: A list formed by joining <code>left</code> and
+   * <code>right</code>.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCList> PLUS = new BinaryOperator<>("+", Priorities.PLUS, MathsOperators::plusOp);
+
   /**
    * The bianry "-" operator, which subtracts two numbers or joins a list to a
    * negative list.
    * <p>
    * This works the same way as {@link #PLUS}, except that the right-hand operand
    * is made {@link #NEGATIVE} first.
-   * <p>
-   * For the operator's function:
-   * 
-   * @param left  A number or list to start with
-   * @param right The number or list to subtract from the left
-   * @return The DCNumber or DCList as described in {@link #PLUS}.
+   * <ul>
+   * <li><code>left</code> operand - list: A starting list</li>
+   * <li><code>right</code> operand - list: The list to subtract from
+   * <code>left</code>.</li>
+   * <li>Returns - list: A list formed by joining <code>left</code> to negative
+   * <code>right</code>.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCList> MINUS = new BinaryOperator<>("-", Priorities.PLUS,
       MathsOperators::minusOp);
+
   /**
-   * The binary "*" operator, which multiplies two numbers or sums of lists.
+   * The binary "*" operator, which multiplies two numbers.
    * <p>
-   * For the operator's function:
-   * 
-   * @param left  A number to start with.
-   * @param right The number by which to multiply left.
-   * @return left times right, as a DCNumber.
+   * <ul>
+   * <li><code>left</code> operand - number: A starting number</li>
+   * <li><code>right</code> operand - number: The number by which to multiply
+   * <code>left</code>.</li>
+   * <li>Returns - number: The product of the other two numbers.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCNumber> TIMES = new BinaryOperator<>("*", Priorities.TIMES,
       MathsOperators::timesOp);
+
   /**
-   * The binary "/" operator, which divides two numbers or sums of lists.
+   * The binary "/" operator, which divides two numbers.
    * <p>
-   * For the operator's function:
-   * 
-   * @param left  A number to start with.
-   * @param right The number by which to divide left.
-   * @return left divided by right, as a DCNumber.
+   * <ul>
+   * <li><code>left</code> operand - number: A starting number</li>
+   * <li><code>right</code> operand - number: The number by which to divide
+   * <code>left</code>.</li>
+   * <li>Returns - number: The product of the other two numbers.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCNumber> DIVIDE = new BinaryOperator<>("/", Priorities.TIMES,
       MathsOperators::divideOp);
+
   /**
-   * The binary "^" operator, which raises one number (or sum of list) to the
-   * power of another.
+   * The binary "^" operator, which raises one number to the power of another.
    * <p>
-   * For the operator's function:
-   * 
-   * @param left  A number to start with.
-   * @param right The power to which left should be raised.
-   * @return left to the power of right, as a DCNumber.
+   * <ul>
+   * <li><code>left</code> operand - number: A starting number</li>
+   * <li><code>right</code> operand - number: The power by which to raise
+   * <code>left</code>.</li>
+   * <li>Returns - number: The product of the other two numbers.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCNumber> POWER = new BinaryOperator<>("^", Priorities.POWER,
       MathsOperators::powerOp);
@@ -84,22 +87,21 @@ public class MathsOperators {
    * The prefix "-" operator, which makes its operand negative.
    * <p>
    * Lists are made negative by making every item they contain negative.
-   * <p>
-   * For the operator's function:
-   * 
-   * @param operand A number or list to make negative.
-   * @return The same number or list, with a negative value.
+   * <ul>
+   * <li>operand - list: The list to make negative.</li>
+   * <li>Returns - list: That list, negative.</li>
+   * </ul>
    */
   public static final PrefixOperator<DCList> NEGATIVE = new PrefixOperator<>("-", Priorities.NEGATIVE,
       MathsOperators::negativeOp);
 
   /**
    * The postfix "!" operator, which takes the factorial of a given number.
-   * <p>
-   * For the operator's function:
-   * 
-   * @param operand An integer between 0 and 15, inclusive.
-   * @return The factorial of that integer, as an operand.
+   * <ul>
+   * <li>operand - number: The number of which to get the factorial, which must be
+   * an integer between 1 and 15.</li>
+   * <li>Returns - number: That number's factorial.</li>
+   * </ul>
    */
   public static final PostfixOperator<DCNumber> FACTORIAL = new PostfixOperator<>("!", Priorities.FACTORIAL,
       MathsOperators::factorialOp);
