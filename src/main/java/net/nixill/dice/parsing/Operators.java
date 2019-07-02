@@ -12,43 +12,40 @@ import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.operations.defaults.MathsOperators;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
+/**
+ * This class is used during parsing to get {@link Operator}s from their symbols
+ * and separate multiple consecutive operators.
+ */
 public class Operators {
   private static HashMap<String, PrefixOperator<?>> prefixOperators;
   private static HashMap<String, PostfixOperator<?>> postfixOperators;
   private static HashMap<String, BinaryOperator<?>> binaryOperators;
 
-  public final static String prefixRegex;
-  public final static String postfixRegex;
-  public final static String binaryRegex;
-  public final static String combinedRegex;
+  private static String prefixRegex;
+  private static String postfixRegex;
+  private static String binaryRegex;
+  private static String combinedRegex;
 
-  public final static Pattern ptnPrefix;
-  public final static Pattern ptnPostfix;
-  public final static Pattern ptnCombined;
+  private static Pattern ptnPrefix;
+  private static Pattern ptnPostfix;
+  private static Pattern ptnCombined;
 
   static {
     prefixOperators = new HashMap<>();
     postfixOperators = new HashMap<>();
     binaryOperators = new HashMap<>();
 
-    prefixOperators.put("-", MathsOperators.NEGATIVE);
+    putOperator(MathsOperators.NEGATIVE);
 
-    postfixOperators.put("!", MathsOperators.FACTORIAL);
+    putOperator(MathsOperators.FACTORIAL);
 
-    binaryOperators.put("+", MathsOperators.PLUS);
-    binaryOperators.put("-", MathsOperators.MINUS);
-    binaryOperators.put("*", MathsOperators.TIMES);
-    binaryOperators.put("/", MathsOperators.DIVIDE);
-    binaryOperators.put("^", MathsOperators.POWER);
+    putOperator(MathsOperators.PLUS);
+    putOperator(MathsOperators.MINUS);
+    putOperator(MathsOperators.TIMES);
+    putOperator(MathsOperators.DIVIDE);
+    putOperator(MathsOperators.POWER);
 
-    prefixRegex = keysToPattern(prefixOperators);
-    postfixRegex = keysToPattern(postfixOperators);
-    binaryRegex = keysToPattern(binaryOperators);
-    combinedRegex = "(" + postfixRegex + "*)" + binaryRegex + "(" + prefixRegex + "*)";
-
-    ptnPrefix = Pattern.compile(prefixRegex);
-    ptnPostfix = Pattern.compile(postfixRegex);
-    ptnCombined = Pattern.compile(combinedRegex);
+    initRegexes();
   }
 
   private static String keysToPattern(HashMap<String, ?> map) {
@@ -61,6 +58,17 @@ public class Operators {
     return out;
   }
 
+  /**
+   * Gets the consecutive operators from a single string.
+   * 
+   * @param opers    The string of consecutive operators.
+   * @param prefix   Whether the operators can only be prefixes.
+   * @param postfix  Whether the operators can only be postfixes.
+   * @param startPos The index of the first character, in case of
+   *                 {@link UserInputException}s.
+   * @return The list of operators, as {@link ExpressionPiece}s, found in the
+   *         string.
+   */
   public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, int startPos) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
 
@@ -115,15 +123,76 @@ public class Operators {
     return pos;
   }
 
+  /**
+   * Get a BinaryOperator by its symbol.
+   * 
+   * @param oper The symbol
+   * @return The operator
+   */
   public static BinaryOperator<?> getBinaryOperator(String oper) {
     return binaryOperators.get(oper);
   }
 
+  /**
+   * Get a PrefixOperator by its symbol.
+   * 
+   * @param oper The symbol
+   * @return The operator
+   */
   public static PrefixOperator<?> getPrefixOperator(String oper) {
     return prefixOperators.get(oper);
   }
 
+  /**
+   * Get a PostfixOperator by its symbol.
+   * 
+   * @param oper The symbol
+   * @return The operator
+   */
   public static PostfixOperator<?> getPostfixOperator(String oper) {
     return postfixOperators.get(oper);
+  }
+
+  /**
+   * Add a BinaryOperator to the list of recognized operators.
+   * 
+   * @param oper The operator to add
+   */
+  public static void putOperator(BinaryOperator<?> oper) {
+    binaryOperators.put(oper.getSymbol(), oper);
+  }
+
+  /**
+   * Add a PrefixOperator to the list of recognized operators.
+   * 
+   * @param oper The operator to add
+   */
+  public static void putOperator(PrefixOperator<?> oper) {
+    prefixOperators.put(oper.getSymbol(), oper);
+  }
+
+  /**
+   * Add a PostfixOperator to the list of recognized operators.
+   * 
+   * @param oper The operator to add
+   */
+  public static void putOperator(PostfixOperator<?> oper) {
+    postfixOperators.put(oper.getSymbol(), oper);
+  }
+
+  /**
+   * Re-initialize the internal regular expressions.
+   * 
+   * Use this after adding a new set of operators.
+   */
+  public static void initRegexes() {
+    prefixRegex = keysToPattern(prefixOperators);
+    postfixRegex = keysToPattern(postfixOperators);
+    binaryRegex = keysToPattern(binaryOperators);
+    combinedRegex = "(" + postfixRegex + "*)" + binaryRegex + "(" + prefixRegex + "*)";
+
+    ptnPrefix = Pattern.compile(prefixRegex);
+    ptnPostfix = Pattern.compile(postfixRegex);
+    ptnCombined = Pattern.compile(combinedRegex);
   }
 }
