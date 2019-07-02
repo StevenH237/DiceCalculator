@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.operations.defaults.MathsOperators;
