@@ -1,10 +1,23 @@
 package net.nixill.dice.objects;
 
+/**
+ * An arbitrary number.
+ */
 public class DCNumber extends DCSingle {
+  /**
+   * Creates an arbitrary number with your own choice of potential.
+   */
   public DCNumber(double value, double potential) {
-    super(value, potential);
+    this.value = value;
+    this.potential = potential;
   }
 
+  /**
+   * Creates an arbitrary number with an arbitrarily selected potential.
+   * <p>
+   * The potential is determined by which of 6, 20, or the next-higher power of 10
+   * is lowest without being below the value.
+   */
   public DCNumber(double value) {
     this.value = value;
     if (value <= 6) {
@@ -20,7 +33,7 @@ public class DCNumber extends DCSingle {
   public String toLongString() {
     return toString();
   }
-  
+
   public void printTree(int level) {
     printSpaced(level, "Number " + value);
   }

@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import net.nixill.dice.objects.DCEntity;
+import net.nixill.dice.objects.DCExpression;
 import net.nixill.dice.objects.DCFunction;
 import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;
@@ -12,7 +13,19 @@ import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
+/**
+ * A class that takes a list of {@link ExpressionPiece}s and builds a tree of
+ * {@link DCExpression}s from them.
+ */
 public class ExpressionParser {
+  /**
+   * Builds a {@link DCExpression} tree from a list of {@link ExpressionPiece}s
+   * 
+   * @param pieces The list of pieces from which to build
+   * @return The root of the DCExpression tree
+   * @throws UserInputException If there are two values not separated by an
+   *                            operator, or unmatched brackets.
+   */
   public static DCEntity parseLine(ArrayList<ExpressionPiece> pieces) {
     DCEntity ent = parseChain(pieces);
     if (!pieces.isEmpty()) {
@@ -140,7 +153,7 @@ public class ExpressionParser {
 
     while (!pieces.isEmpty()) {
       ExpressionPiece piece = pieces.get(0);
-      
+
       // Get the next value, if there is one
       DCEntity ent = null;
       boolean err = false;
@@ -232,9 +245,8 @@ public class ExpressionParser {
           while (!exps.isEmpty()) {
             expNext = exps.getLast();
             if (expNext.getOper().getPriority() > op.getPriority()
-              || (expNext.getOper().getPriority() == op.getPriority() 
-                && !Operator.isFromRight(op.getPriority()))
-              || expNext.getOper() instanceof PostfixOperator) {
+                || (expNext.getOper().getPriority() == op.getPriority() && !Operator.isFromRight(op.getPriority()))
+                || expNext.getOper() instanceof PostfixOperator) {
               expOld = exps.removeLast();
               expNext = null;
             } else {
@@ -250,7 +262,7 @@ public class ExpressionParser {
           } else {
             expNew.setLeft(expOld);
           }
-          
+
           if (expNext != null) {
             expNext.setRight(expNew);
           }
@@ -261,13 +273,12 @@ public class ExpressionParser {
 
       pieces.remove(0);
     }
-    
+
     if (exps.isEmpty()) {
       return hold;
     } else {
       return exps.getFirst().build();
     }
   }
-
 
 }

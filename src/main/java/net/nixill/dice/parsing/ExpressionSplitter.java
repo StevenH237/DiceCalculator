@@ -8,15 +8,22 @@ import java.util.regex.Pattern;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
+/**
+ * A class that takes an input string and splits it into a list of
+ * {@link ExpressionPiece}s.
+ */
 public class ExpressionSplitter {
 
+  /**
+   * Runs {@link #split} and {@link ExpressionParser#parseLine} consecutively.
+   */
   public static DCEntity parse(String input) {
     input = input.toLowerCase();
     input = input.replaceAll("[ `]", "");
 
     ArrayList<ExpressionPiece> stack = split(input);
     DCEntity ent = ExpressionParser.parseLine(stack);
-    
+
     return ent;
   }
 
@@ -30,6 +37,7 @@ public class ExpressionSplitter {
    * </ul>
    * <p>
    * &nbsp;
+   * 
    * @param input The string to split
    * @return The split string
    */
@@ -65,7 +73,7 @@ public class ExpressionSplitter {
           last = mtcSeparator.group();
           out.add(new ExpressionPiece(mtcSeparator.group(), ExpressionPieceType.BRACKET, pos));
           add = mtcSeparator.end();
-          
+
           break;
         }
 
@@ -75,7 +83,7 @@ public class ExpressionSplitter {
           last = mtcName.group();
           out.add(new ExpressionPiece(mtcName.group(), ExpressionPieceType.NAME, pos));
           add = mtcName.end();
-          
+
           break;
         }
 
@@ -89,23 +97,25 @@ public class ExpressionSplitter {
           if (input.length() == add) {
             next = "";
           } else {
-            next = input.substring(add, add+1);
+            next = input.substring(add, add + 1);
           }
 
-          // If the operator immediately follows an opening bracket, it can only be a prefix operator.
+          // If the operator immediately follows an opening bracket, it can only be a
+          // prefix operator.
           boolean prefix = (last.equals("(") || last.equals("[") || last.equals(",") || last.equals(""));
-          // If the operator immediately precedes a closing bracket, it can only be a postfix operator.
+          // If the operator immediately precedes a closing bracket, it can only be a
+          // postfix operator.
           boolean postfix = (next.equals(")") || next.equals("]") || next.equals(",") || next.equals(""));
 
           // An operator can't be both (i.e. the only thing between two brackets).
           if (prefix && postfix) {
             throw new UserInputException("A number was expected here.", pos);
           }
-          
+
           // Multiple operators might be in a row, so get them all.
           List<ExpressionPiece> pcs = Operators.getOpers(opers, prefix, postfix, pos);
           out.addAll(pcs);
-          
+
           last = mtcOperator.group();
 
           break;
@@ -114,7 +124,7 @@ public class ExpressionSplitter {
         // If no match and it reaches this point:
         throw new UserInputException("I don't know what this means.", pos);
       }
-    
+
       input = input.substring(add);
       pos += add;
     }

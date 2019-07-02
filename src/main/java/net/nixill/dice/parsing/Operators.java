@@ -7,16 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.nixill.dice.operations.BinaryOperator;
-import net.nixill.dice.operations.MathsOperators;
 import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
+import net.nixill.dice.operations.defaults.MathsOperators;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 public class Operators {
   private static HashMap<String, PrefixOperator<?>> prefixOperators;
   private static HashMap<String, PostfixOperator<?>> postfixOperators;
   private static HashMap<String, BinaryOperator<?>> binaryOperators;
-  
+
   public final static String prefixRegex;
   public final static String postfixRegex;
   public final static String binaryRegex;
@@ -60,16 +60,16 @@ public class Operators {
     out = "(" + out.substring(1) + ")";
     return out;
   }
-  
+
   public static List<ExpressionPiece> getOpers(String opers, boolean prefix, boolean postfix, int startPos) {
     ArrayList<ExpressionPiece> out = new ArrayList<>();
 
     int pos = startPos;
-    
+
     Matcher mtcPrefix = null;
     Matcher mtcPostfix = null;
     String midString = null;
-    
+
     // Split the operator string into postfixes, in-between, and prefixes.
     if (!(prefix || postfix)) {
       Matcher mtcCombined = ptnCombined.matcher(opers);
@@ -108,9 +108,7 @@ public class Operators {
   private static int getMultiOpers(List<ExpressionPiece> list, Matcher matcher, int pos, boolean post) {
     while (matcher.lookingAt()) {
       list.add(new ExpressionPiece(matcher.group(),
-        (post)?ExpressionPieceType.POSTFIX_OPERATOR:
-          ExpressionPieceType.PREFIX_OPERATOR,
-        pos));
+          (post) ? ExpressionPieceType.POSTFIX_OPERATOR : ExpressionPieceType.PREFIX_OPERATOR, pos));
       pos += matcher.end();
       matcher.region(matcher.end(), matcher.regionEnd());
     }

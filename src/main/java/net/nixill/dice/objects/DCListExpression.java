@@ -1,12 +1,21 @@
 package net.nixill.dice.objects;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+/**
+ * A type of {@link DCExpression} that consists of a list of many entities.
+ * <p>
+ * The value of a DCList is the same list but with all entities resolved into
+ * values.
+ */
 public class DCListExpression extends DCExpression {
   ArrayList<DCEntity> listItems;
 
-  public DCListExpression(Collection<DCEntity> items) {
+  /**
+   * Creates a new DCListExpression with the given items.
+   */
+  public DCListExpression(List<DCEntity> items) {
     listItems = new ArrayList<>(items);
   }
 
