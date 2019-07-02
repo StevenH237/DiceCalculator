@@ -8,17 +8,17 @@ import java.util.Collection;
  */
 public class DCList extends DCValue {
   private ArrayList<DCValue> listItems;
-
+  
   /**
    * Creates a new list of values.
    */
   public DCList(Collection<DCValue> items) {
     listItems = new ArrayList<>(items);
   }
-
+  
   /**
-   * Casts this DCList to a {@link DCSingle} by taking the sum of all of its
-   * items.
+   * Casts this DCList to a {@link DCSingle} by taking the sum of all of
+   * its items.
    */
   @Override
   public DCSingle getSingle() {
@@ -28,7 +28,7 @@ public class DCList extends DCValue {
     }
     return new DCNumber(sum);
   }
-
+  
   /**
    * Returns this DCList itself.
    */
@@ -36,14 +36,23 @@ public class DCList extends DCValue {
   public DCList getList() {
     return this;
   }
-
+  
   /**
    * Returns a new {@link ArrayList} containing this list's items.
    */
   public ArrayList<DCValue> getItems() {
     return new ArrayList<>(listItems);
   }
-
+  
+  /**
+   * Returns the number of items in this list.
+   * 
+   * @return The size of this list.
+   */
+  public int size() {
+    return listItems.size();
+  }
+  
   @Override
   public String toString() {
     String out = getSingle().getAmount() + " [";
@@ -53,13 +62,13 @@ public class DCList extends DCValue {
     out = out.substring(0, out.length() - 2) + "]";
     return out;
   }
-
+  
   @Override
   public String toShortString() {
     String out = getSingle().getAmount() + " [...]";
     return out;
   }
-
+  
   @Override
   public String toLongString() {
     String out = getSingle().getAmount() + " [";
@@ -69,7 +78,7 @@ public class DCList extends DCValue {
     out = out.substring(0, out.length() - 2) + "]";
     return out;
   }
-
+  
   public void printTree(int level) {
     printSpaced(level, "List: " + listItems.size() + " item(s)");
     for (DCValue val : listItems) {
