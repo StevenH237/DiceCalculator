@@ -1,13 +1,18 @@
 package net.nixill.dice.operations.defaults;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import net.nixill.dice.objects.DCCoin;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCList;
+import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCSingle;
 import net.nixill.dice.objects.DCValue;
+import net.nixill.dice.objects.Randomizer;
 import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
 
 public class ListOperators {
@@ -134,15 +139,69 @@ public class ListOperators {
       });
   
   /**
-       * The postfix "?" operator, which shuffles the list.
-       * <ul>
-       * <li>Operand - list: A list</li>
-       * <li>Returns - list: The same list with its items in random order</li>
-       * </ul>
-       */
-      public static final PostfixOperator<DCList> SHUFFLE = new PrefixOperator<>("?", Priorities.LIST, (ent) -> {
+   * The postfix "?" operator, which shuffles the list.
+   * <ul>
+   * <li>Operand - list: A list</li>
+   * <li>Returns - list: The same list with its items in random order</li>
+   * </ul>
+   */
+  public static final PostfixOperator<DCList> SHUFFLE = new PostfixOperator<>(
+      "?", Priorities.LIST, (ent) -> {
         DCList list = ent.getValue().getList();
-
         
-      })
+        if (list.size() < 2) {
+          return list;
+        } else {
+          ArrayList<DCValue> in = list.getItems();
+          ArrayList<DCValue> out = new ArrayList<>();
+          
+          Random rand = Randomizer.get();
+          
+          while (!in.isEmpty()) {
+            DCValue val = in.remove(rand.nextInt(in.size()));
+            out.add(val);
+          }
+          return new DCList(out);
+        }
+      });
+  
+  /**
+   * The binary "s" operator, which selects a random item from the list.
+   * <p>
+   * Only the selected item is evaluated, which can be useful for recursive
+   * functions.
+   * <p>
+   * If the right operand is a coin, Heads selects the second item, and
+   * Tails selects the first. In all other cases, items are numbered
+   * starting from 1.
+   * <ul>
+   * <li><code>left</code> operand - expression list: A list</li>
+   * <li><code>right</code> operand - number: The item to select from the
+   * list</li>
+   */
+  public static final BinaryOperator<DCValue> SELECT = new BinaryOperator<DCValue>(
+      "s", Priorities.LIST, (left, right) -> {
+        DCValue val = right.getValue();
+        int selection = 0;
+        
+        if (val instanceof DCCoin) {
+          if (((DCCoin) val).isHeads()) {
+            selection = 1;
+          }
+        } else {
+          selection = (int) Math.floor(val.getSingle().getAmount());
+        }
+        
+        selection = Math.max(0, selection);
+        
+        DCList list = null;
+        DCListExpression exp = null;
+        
+        if (left instanceof DCListExpression) {
+          exp = (DCListExpression) exp;
+          
+        }
+        
+        return null;
+      });
 }
