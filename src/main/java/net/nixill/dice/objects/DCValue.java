@@ -12,18 +12,25 @@ public abstract class DCValue extends DCEntity {
   public DCValue getValue() {
     return this;
   }
-
+  
   /**
    * Casts the value to a {@link DCSingle}.
    * 
    * @return This value as a {@link DCSingle}.
    */
   public abstract DCSingle getSingle();
-
+  
   /**
    * Casts the value to a {@link DCList}.
    * 
    * @return This value as a {@link DCSingle}.
    */
   public abstract DCList getList();
+  
+  /**
+   * Casts the value to a {@link DCString}.
+   * 
+   * @return This value as a {@link DCString}.
+   */
+  public abstract DCString getString();
 }

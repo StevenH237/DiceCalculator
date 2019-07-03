@@ -38,6 +38,21 @@ public class DCList extends DCValue {
   }
   
   /**
+   * Returns this object converted to a DCString.
+   */
+  @Override
+  public DCString getString() {
+    StringBuilder out = new StringBuilder();
+    
+    for (DCValue val : listItems) {
+      char chr = (char) val.getSingle().value;
+      out.append(chr);
+    }
+    
+    return new DCString(out.toString());
+  }
+  
+  /**
    * Returns a new {@link ArrayList} containing this list's items.
    */
   public ArrayList<DCValue> getItems() {
@@ -51,6 +66,17 @@ public class DCList extends DCValue {
    */
   public int size() {
     return listItems.size();
+  }
+  
+  /**
+   * Returns a single item from the list.
+   * 
+   * @param i
+   *   The index of the item to get.
+   * @return The selected item.
+   */
+  public DCValue get(int i) {
+    return listItems.get(i);
   }
   
   @Override

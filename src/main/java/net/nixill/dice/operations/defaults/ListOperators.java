@@ -9,6 +9,7 @@ import net.nixill.dice.objects.DCList;
 import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCSingle;
+import net.nixill.dice.objects.DCString;
 import net.nixill.dice.objects.DCValue;
 import net.nixill.dice.objects.Randomizer;
 import net.nixill.dice.operations.BinaryOperator;
@@ -17,37 +18,34 @@ import net.nixill.dice.operations.PrefixOperator;
 
 public class ListOperators {
   /**
-   * The binary "+" operator, which joins two lists.
+   * The binary "+" operator, which adds two numbers, joins two lists, or
+   * concatenates two strings.
    * <ul>
-   * <li><code>left</code> operand - list: A starting list</li>
-   * <li><code>right</code> operand - list: The list to join to
+   * <li><code>left</code> operand - value: A starting value</li>
+   * <li><code>right</code> operand - value: The value to add to
    * <code>left</code>.</li>
    * <li>Returns - list: A list formed by joining <code>left</code> and
    * <code>right</code>.</li>
    * </ul>
    */
-  public static final BinaryOperator<DCList> JOIN = new BinaryOperator<>(
+  public static final BinaryOperator<DCValue> JOIN = new BinaryOperator<>(
       "+", Priorities.JOIN, ListOperators::joinOp);
   
-  public static DCList joinOp(DCEntity leftEnt, DCEntity rightEnt) {
-    ArrayList<DCValue> combined;
+  public static DCValue joinOp(DCEntity leftEnt, DCEntity rightEnt) {
     DCValue left = leftEnt.getValue();
     DCValue right = rightEnt.getValue();
     
-    if (left instanceof DCSingle) {
-      combined = new ArrayList<>();
-      combined.add(left);
+    if (left instanceof DCString || right instanceof DCString) {
+      return new DCString(
+          left.getString().toString() + right.getString().toString());
+    } else if (left instanceof DCList || right instanceof DCList) {
+      ArrayList<DCValue> out = left.getList().getItems();
+      out.addAll(right.getList().getItems());
+      return new DCList(out);
     } else {
-      combined = left.getList().getItems();
+      return new DCNumber(
+          left.getSingle().getAmount() + right.getSingle().getAmount());
     }
-    
-    if (right instanceof DCSingle) {
-      combined.add(right);
-    } else {
-      combined.addAll(right.getList().getItems());
-    }
-    
-    return new DCList(combined);
   }
   
   /**
@@ -59,20 +57,17 @@ public class ListOperators {
    * <li>Returns - list: That list, negative.</li>
    * </ul>
    */
-  public static final PrefixOperator<DCList> NEGATIVE = new PrefixOperator<>(
+  public static final PrefixOperator<DCValue> NEGATIVE = new PrefixOperator<>(
       "-", Priorities.NEGATIVE, ListOperators::negativeOp);
   
-  public static DCList negativeOp(DCEntity ent) {
-    ArrayList<DCValue> in;
+  public static DCValue negativeOp(DCEntity ent) {
     DCValue val = ent.getValue();
     
     if (val instanceof DCSingle) {
-      in = new ArrayList<>();
-      in.add(val);
-    } else {
-      in = val.getList().getItems();
+      return new DCNumber(-val.getSingle().getAmount());
     }
     
+    ArrayList<DCValue> in = val.getList().getItems();
     ArrayList<DCValue> out = new ArrayList<>();
     
     for (DCValue inVal : in) {
@@ -102,7 +97,7 @@ public class ListOperators {
    * negative <code>right</code>.</li>
    * </ul>
    */
-  public static final BinaryOperator<DCList> NEG_JOIN = new BinaryOperator<>(
+  public static final BinaryOperator<DCValue> NEG_JOIN = new BinaryOperator<>(
       "-", Priorities.JOIN, (left, right) -> {
         return joinOp(left, negativeOp(right));
       });
@@ -189,19 +184,19 @@ public class ListOperators {
             selection = 1;
           }
         } else {
-          selection = (int) Math.floor(val.getSingle().getAmount());
+          selection = (int) Math.floor(val.getSingle().getAmount()) - 1;
         }
         
         selection = Math.max(0, selection);
         
-        DCList list = null;
-        DCListExpression exp = null;
-        
         if (left instanceof DCListExpression) {
-          exp = (DCListExpression) exp;
-          
+          DCListExpression exp = (DCListExpression) left;
+          selection = Math.min(selection, exp.size() - 1);
+          return exp.get(selection).getValue();
+        } else {
+          DCList list = left.getValue().getList();
+          selection = Math.min(selection, list.size() - 1);
+          return list.get(selection);
         }
-        
-        return null;
       });
 }
