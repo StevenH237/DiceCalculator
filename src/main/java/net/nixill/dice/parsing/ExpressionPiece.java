@@ -7,34 +7,36 @@ import net.nixill.dice.objects.DCExpression;
  */
 public class ExpressionPiece {
   /**
-   * The text of that piece. Should include all things necessary to remake the
-   * written expression from its pieces' <code>content</code>s.
+   * The text of that piece. Should include all things necessary to remake
+   * the written expression from its pieces' <code>content</code>s.
    */
-  public final String contents;
+  public final String              contents;
   /**
-   * Which type the piece is. See {@link ExpressionPieceType} for more detail.
+   * Which type the piece is. See {@link ExpressionPieceType} for more
+   * detail.
    */
   public final ExpressionPieceType type;
   /**
-   * The index of the first character of the contents of the piece. Useful for
-   * reporting errors.
+   * The index of the first character of the contents of the piece. Useful
+   * for reporting errors.
    */
-  public final int position;
-
+  public final int                 position;
+  
   /**
-   * Creates a new ExpressionPiece. See {@link #contents}, {@link #type}, and
-   * {@link #position} for details on the parameters.
+   * Creates a new ExpressionPiece. See {@link #contents}, {@link #type},
+   * and {@link #position} for details on the parameters.
    */
-  public ExpressionPiece(String contents, ExpressionPieceType type, int pos) {
+  public ExpressionPiece(String contents, ExpressionPieceType type,
+      int pos) {
     this.contents = contents;
     this.type = type;
     this.position = pos;
   }
-
+  
   public String toString() {
     return type.type + ":" + contents + "(" + position + ")";
   }
-
+  
   /**
    * Represents the types of pieces of an expression.
    */
@@ -50,10 +52,12 @@ public class ExpressionPiece {
     /** Any postfix operator. */
     POSTFIX_OPERATOR("post"),
     /** A { followed by a name. */
-    NAME("name");
-
+    NAME("name"),
+    /** A string of text with its surrounding quotes. */
+    STRING("string");
+    
     private final String type;
-
+    
     private ExpressionPieceType(String t) {
       type = t;
     }
