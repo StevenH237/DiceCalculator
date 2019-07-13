@@ -17,24 +17,26 @@ import net.nixill.dice.parsing.UserInputException;
  */
 public class DCFunction extends DCExpression {
   private ArrayList<DCEntity> params;
-  private String name;
-
+  private String              name;
+  
   /**
    * Create a new DCFunction with its parameter entities.
    * 
-   * @param name   The function's name
-   * @param params The function's params.
+   * @param name
+   *   The function's name
+   * @param params
+   *   The function's params.
    */
   public DCFunction(String name, List<DCEntity> params) {
     this.name = name;
     this.params = new ArrayList<>(params);
   }
-
+  
   /**
    * Runs the function and returns its final value.
    * <p>
-   * This operation gets the entity named by this function, then gets the value of
-   * that entity.
+   * This operation gets the entity named by this function, then gets the
+   * value of that entity.
    * <p>
    * To simply retrieve the named entity, use {@link #getSaved()}.
    * 
@@ -44,23 +46,24 @@ public class DCFunction extends DCExpression {
   @Override
   public DCValue getValue() {
     DCEntity ent = getSaved();
-
+    
     if (ent instanceof DCExpression) {
       HashMap<String, DCEntity> pars = new HashMap<>();
       for (int i = 0; i < params.size(); i++) {
         pars.put(i + 1 + "", params.get(i));
       }
-
-      HashMap<String, DCEntity> preFuncs = SavedFunctions.setFunctions(pars);
+      
+      HashMap<String, DCEntity> preFuncs = SavedFunctions
+          .setFunctions(pars);
       DCValue val = ent.getValue();
       SavedFunctions.setFunctions(preFuncs);
-
+      
       return val;
     } else {
       return ent.getValue();
     }
   }
-
+  
   /**
    * Gets the entity named by this function.
    * 
@@ -68,25 +71,27 @@ public class DCFunction extends DCExpression {
    */
   public DCEntity getSaved() {
     HashMap<String, DCEntity> funcs = SavedFunctions.getAllMerged();
-
+    
     DCEntity ent = funcs.get(name);
-
+    
     if (ent == null) {
       try {
         Integer.parseInt(name);
         if (params.size() >= 1) {
           ent = params.get(0);
         } else {
-          throw new UserInputException("Function doesn't have " + name + " param(s).", -1);
+          throw new UserInputException(
+              "Function doesn't have " + name + " param(s).", -1);
         }
       } catch (NumberFormatException ex) {
-        throw new UserInputException("Unknown function or variable " + name, -1);
+        throw new UserInputException(
+            "Unknown function or variable " + name, -1);
       }
     }
-
+    
     return ent;
   }
-
+  
   /**
    * Returns the parameters passed into the function.
    * 
@@ -95,7 +100,7 @@ public class DCFunction extends DCExpression {
   public List<DCEntity> getParams() {
     return Collections.unmodifiableList(params);
   }
-
+  
   @Override
   public String toString() {
     String out = "{" + name;
@@ -104,12 +109,12 @@ public class DCFunction extends DCExpression {
     }
     return out + "}";
   }
-
+  
   @Override
   public String toShortString() {
     return "{" + name + "," + params.size() + " params}";
   }
-
+  
   @Override
   public String toLongString() {
     String out = "{" + name;
@@ -118,9 +123,10 @@ public class DCFunction extends DCExpression {
     }
     return out + "}";
   }
-
+  
   public void printTree(int level) {
-    printSpaced(level, "Function \"" + name + "\": " + params.size() + " param(s)");
+    printSpaced(level,
+        "Function \"" + name + "\": " + params.size() + " param(s)");
     for (DCEntity ent : params) {
       ent.printTree(level + 1);
     }
