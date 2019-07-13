@@ -6,8 +6,7 @@ import java.util.function.Function;
 import net.nixill.dice.objects.DCEntity;
 
 /**
- * A class that stores saved {@link Function}s per thread and allows them
- * to be accessed statically.
+ * A class that provides access to save and load {@link Function}s.
  */
 public class SavedFunctions {
   private static FunctionLoader                              loader;
