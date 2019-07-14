@@ -2,11 +2,9 @@ package net.nixill.dice.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import net.nixill.dice.operations.SavedFunctions;
-import net.nixill.dice.parsing.UserInputException;
 
 /**
  * A named function, with or without parameters.
@@ -48,15 +46,9 @@ public class DCFunction extends DCExpression {
     DCEntity ent = getSaved();
     
     if (ent instanceof DCExpression) {
-      HashMap<String, DCEntity> pars = new HashMap<>();
-      for (int i = 0; i < params.size(); i++) {
-        pars.put(i + 1 + "", params.get(i));
-      }
-      
-      HashMap<String, DCEntity> preFuncs = SavedFunctions
-          .setFunctions(pars);
+      SavedFunctions.stackParams(params);
       DCValue val = ent.getValue();
-      SavedFunctions.setFunctions(preFuncs);
+      SavedFunctions.unstackParams();
       
       return val;
     } else {
@@ -70,24 +62,7 @@ public class DCFunction extends DCExpression {
    * @return The named entity
    */
   public DCEntity getSaved() {
-    HashMap<String, DCEntity> funcs = SavedFunctions.getAllMerged();
-    
-    DCEntity ent = funcs.get(name);
-    
-    if (ent == null) {
-      try {
-        Integer.parseInt(name);
-        if (params.size() >= 1) {
-          ent = params.get(0);
-        } else {
-          throw new UserInputException(
-              "Function doesn't have " + name + " param(s).", -1);
-        }
-      } catch (NumberFormatException ex) {
-        throw new UserInputException(
-            "Unknown function or variable " + name, -1);
-      }
-    }
+    DCEntity ent = SavedFunctions.get(name);
     
     return ent;
   }

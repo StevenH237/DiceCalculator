@@ -3,6 +3,7 @@ package net.nixill.dice.parsing;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCExpression;
 import net.nixill.dice.objects.DCFunction;

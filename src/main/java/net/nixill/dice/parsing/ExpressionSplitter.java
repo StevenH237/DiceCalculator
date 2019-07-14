@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 

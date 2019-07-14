@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;

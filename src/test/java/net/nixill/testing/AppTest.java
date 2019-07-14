@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCValue;
@@ -11,7 +12,6 @@ import net.nixill.dice.operations.SavedFunctions;
 import net.nixill.dice.parsing.ExpressionParser;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
-import net.nixill.dice.parsing.UserInputException;
 
 public class AppTest {
   @Test
@@ -46,11 +46,11 @@ public class AppTest {
     // testLine("\"Hello\" + [32] + \"World\"");
     // testLine("\"Hello\" + 32 + \"World\"");
     // testLine("[\"red\", \"green\", \"blue\"]?s1");
-    testLine("1 + 2");
-    testLine("1 + [3]");
-    testLine("1 + \"4\"");
-    testLine("[2] + [5]");
-    testLine("[50] + \"6\"");
+    // testLine("1 + 2");
+    // testLine("1 + [3]");
+    // testLine("1 + \"4\"");
+    // testLine("[2] + [5]");
+    // testLine("[50] + \"6\"");
   }
   
   public void printExpList(ArrayList<ExpressionPiece> list) {
