@@ -51,11 +51,17 @@ public class DCDie extends DCSingle {
   }
 
   @Override
-  public String toLongString() {
-    return value + " (d" + potential + ")";
+  public String toString(int level) {
+    return numToString(value);
   }
 
+  @Override
+  public String toCode() {
+    return "{!d," + value + "," + potential + "}";
+  }
+
+  @Override
   public void printTree(int level) {
-    printSpaced(level, "Die: " + toLongString());
+    printSpaced(level, "Die: " + numToString(value) + " (d" + numToString(potential) + ")");
   }
 }

@@ -9,8 +9,19 @@ package net.nixill.dice.exception;
  */
 public class DiceCalcException extends RuntimeException {
   private static final long serialVersionUID = 7206711603686419099L;
-  
+
+  public DiceCalcException() {
+  }
+
   public DiceCalcException(Throwable t) {
     super(t);
+  }
+
+  public DiceCalcException(String msg) {
+    super(msg);
+  }
+
+  public DiceCalcException(String msg, Throwable t) {
+    super(msg, t);
   }
 }

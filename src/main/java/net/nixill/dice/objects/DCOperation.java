@@ -50,44 +50,32 @@ public class DCOperation extends DCExpression {
   }
 
   @Override
-  public String toString() {
+  public String toString(int level) {
     if (oper instanceof BinaryOperator) {
-      return "(" + left.toString() + oper.getSymbol() + right.toString() + ")";
+      return "(" + left.toString(level - 1) + oper.getSymbol() + right.toString(level - 1) + ")";
     } else if (oper instanceof PrefixOperator) {
-      return "(" + oper.getSymbol() + right.toString() + ")";
+      return "(" + oper.getSymbol() + right.toString(level - 1) + ")";
     } else if (oper instanceof PostfixOperator) {
-      return "(" + left.toString() + oper.getSymbol() + ")";
+      return "(" + left.toString(level - 1) + oper.getSymbol() + ")";
     } else {
       return "";
     }
   }
 
   @Override
-  public String toShortString() {
+  public String toCode() {
     if (oper instanceof BinaryOperator) {
-      return "(" + left.toShortString() + oper.getSymbol() + right.toShortString() + ")";
+      return "(" + left.toCode() + oper.getSymbol() + right.toCode() + ")";
     } else if (oper instanceof PrefixOperator) {
-      return "(" + oper.getSymbol() + right.toShortString() + ")";
+      return "(" + oper.getSymbol() + right.toCode() + ")";
     } else if (oper instanceof PostfixOperator) {
-      return "(" + left.toShortString() + oper.getSymbol() + ")";
+      return "(" + left.toCode() + oper.getSymbol() + ")";
     } else {
       return "";
     }
   }
 
   @Override
-  public String toLongString() {
-    if (oper instanceof BinaryOperator) {
-      return "(" + left.toLongString() + oper.getSymbol() + right.toLongString() + ")";
-    } else if (oper instanceof PrefixOperator) {
-      return "(" + oper.getSymbol() + right.toLongString() + ")";
-    } else if (oper instanceof PostfixOperator) {
-      return "(" + left.toLongString() + oper.getSymbol() + ")";
-    } else {
-      return "";
-    }
-  }
-
   public void printTree(int level) {
     printSpaced(level, "Operator \"" + oper.getSymbol() + "\"");
     if (left != null) {

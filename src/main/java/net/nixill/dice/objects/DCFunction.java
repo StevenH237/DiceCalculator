@@ -15,26 +15,24 @@ import net.nixill.dice.operations.SavedFunctions;
  */
 public class DCFunction extends DCExpression {
   private ArrayList<DCEntity> params;
-  private String              name;
-  
+  private String name;
+
   /**
    * Create a new DCFunction with its parameter entities.
    * 
-   * @param name
-   *   The function's name
-   * @param params
-   *   The function's params.
+   * @param name   The function's name
+   * @param params The function's params.
    */
   public DCFunction(String name, List<DCEntity> params) {
     this.name = name;
     this.params = new ArrayList<>(params);
   }
-  
+
   /**
    * Runs the function and returns its final value.
    * <p>
-   * This operation gets the entity named by this function, then gets the
-   * value of that entity.
+   * This operation gets the entity named by this function, then gets the value of
+   * that entity.
    * <p>
    * To simply retrieve the named entity, use {@link #getSaved()}.
    * 
@@ -44,18 +42,18 @@ public class DCFunction extends DCExpression {
   @Override
   public DCValue getValue() {
     DCEntity ent = getSaved();
-    
+
     if (ent instanceof DCExpression) {
       SavedFunctions.stackParams(params);
       DCValue val = ent.getValue();
       SavedFunctions.unstackParams();
-      
+
       return val;
     } else {
       return ent.getValue();
     }
   }
-  
+
   /**
    * Gets the entity named by this function.
    * 
@@ -63,10 +61,10 @@ public class DCFunction extends DCExpression {
    */
   public DCEntity getSaved() {
     DCEntity ent = SavedFunctions.get(name);
-    
+
     return ent;
   }
-  
+
   /**
    * Returns the parameters passed into the function.
    * 
@@ -75,33 +73,28 @@ public class DCFunction extends DCExpression {
   public List<DCEntity> getParams() {
     return Collections.unmodifiableList(params);
   }
-  
+
   @Override
-  public String toString() {
+  public String toString(int lvl) {
     String out = "{" + name;
     for (DCEntity ent : params) {
-      out += "," + ent.toShortString();
+      out += ", " + ent.toString(lvl - 1);
     }
     return out + "}";
   }
-  
+
   @Override
-  public String toShortString() {
-    return "{" + name + "," + params.size() + " params}";
-  }
-  
-  @Override
-  public String toLongString() {
+  public String toCode() {
     String out = "{" + name;
     for (DCEntity ent : params) {
-      out += "," + ent.toLongString();
+      out += "," + ent.toCode();
     }
     return out + "}";
   }
-  
+
+  @Override
   public void printTree(int level) {
-    printSpaced(level,
-        "Function \"" + name + "\": " + params.size() + " param(s)");
+    printSpaced(level, "Function \"" + name + "\": " + params.size() + " param(s)");
     for (DCEntity ent : params) {
       ent.printTree(level + 1);
     }

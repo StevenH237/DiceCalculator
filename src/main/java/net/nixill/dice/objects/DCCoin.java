@@ -51,31 +51,37 @@ public class DCCoin extends DCSingle {
     return potential;
   }
 
-  public String toString() {
+  @Override
+  public String toString(int level) {
+    String out;
+
     if (heads) {
-      return "Heads";
+      out = "Heads";
     } else {
-      return "Tails";
+      out = "Tails";
     }
+
+    if (level == 0) {
+      out = out.substring(0, 1);
+    }
+
+    return out;
   }
 
-  public String toShortString() {
+  @Override
+  public String toCode() {
+    String out = "{!c,";
     if (heads) {
-      return "H";
+      out += "1";
     } else {
-      return "T";
+      out += "0";
     }
+    out += "," + value + "}";
+    return out;
   }
 
-  public String toLongString() {
-    if (heads) {
-      return "Heads (" + value + ")";
-    } else {
-      return "Tails (0)";
-    }
-  }
-
+  @Override
   public void printTree(int level) {
-    printSpaced(level, "Coin: " + toLongString());
+    printSpaced(level, "Coin: " + toString() + " (" + numToString(value) + ")");
   }
 }
