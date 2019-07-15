@@ -1,17 +1,36 @@
 package net.nixill.dice.objects;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.function.Function;
 
-public abstract class DCCodeFunction extends DCFunction {
-  public DCCodeFunction(String name, DCEntity... params) {
-    super(name, Arrays.asList(params));
+public class DCCodeFunction extends DCExpression {
+  private Function<ArrayList<DCEntity>, DCValue> code;
+  
+  public DCCodeFunction(Function<ArrayList<DCEntity>, DCValue> func) {
+    code = func;
   }
-
+  
   @Override
-  public abstract DCValue getValue();
-
+  public DCValue getValue() {
+    return getValue(null);
+  }
+  
+  public DCValue getValue(ArrayList<DCEntity> params) {
+    return code.apply(params);
+  }
+  
   @Override
-  public DCEntity getSaved() {
-    return this;
+  public String toString(int level) {
+    return "{!x}";
+  }
+  
+  @Override
+  public String toCode() {
+    return "{!x}";
+  }
+  
+  @Override
+  public void printTree(int level) {
+    printSpaced(level, "Arbitrary code function");
   }
 }

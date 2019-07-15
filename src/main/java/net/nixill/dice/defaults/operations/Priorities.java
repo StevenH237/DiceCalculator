@@ -1,4 +1,4 @@
-package net.nixill.dice.operations.defaults;
+package net.nixill.dice.defaults.operations;
 
 import net.nixill.dice.operations.Operator;
 
