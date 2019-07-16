@@ -19,6 +19,11 @@ public final class Priorities {
   public static final int JOIN = 0;
   
   /**
+   * The priority of "d", which is 50.
+   */
+  public static final int DICE = JOIN + 50;
+  
+  /**
    * The priority of prefix "#" and "$", which is -5.
    */
   public static final int LIST = JOIN - 5;
