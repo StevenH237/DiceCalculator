@@ -3,6 +3,7 @@ package net.nixill.dice.operations;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import net.nixill.dice.defaults.functions.DieCoinFunctions;
 import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.exception.NoSuchFunctionException;
 import net.nixill.dice.objects.DCEntity;
@@ -34,6 +35,12 @@ public class SavedFunctions {
   }
 
   public static DCEntity get(String name) {
+    if (name.equals("!d")) {
+      return DieCoinFunctions.DIE;
+    } else if (name.equals("!c")) {
+      return DieCoinFunctions.COIN;
+    }
+
     try {
       int i = Integer.parseInt(name) - 1;
       ArrayList<DCEntity> pars = params.get().get(0);
