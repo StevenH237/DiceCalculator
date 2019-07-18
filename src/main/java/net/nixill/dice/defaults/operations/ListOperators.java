@@ -16,6 +16,9 @@ import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
 
+/**
+ * This class contains the default List operators.
+ */
 public class ListOperators {
   /**
    * The binary "+" operator, which adds two numbers, joins two lists, or

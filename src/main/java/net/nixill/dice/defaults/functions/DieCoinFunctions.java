@@ -5,8 +5,21 @@ import net.nixill.dice.objects.DCCodeFunction;
 import net.nixill.dice.objects.DCCoin;
 import net.nixill.dice.objects.DCDie;
 
+/**
+ * Provides built-in functions to regenerate a saved die or coin. Also usable in theory to create new ones with arbitrary values.
+ */
 public class DieCoinFunctions {
+  /**
+   * (Re)creates a die.
+   * <p>
+   * The first parameter is the actual value of the die, and the second the number of sides.
+   */
   public static final DCCodeFunction DIE;
+  /**
+   * (Re)creates a flipped coin.
+   * <p>
+   * The first parameter is 0 if the coin is tails and 1 if heads. The second parameter is the value of a heads.
+   */
   public static final DCCodeFunction COIN;
   
   static {

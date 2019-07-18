@@ -13,6 +13,9 @@ import net.nixill.dice.operations.ComparisonOperators.Comparison;
 import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.operations.SavedFunctions;
 
+/**
+ * 
+ */
 public class DiceOperators {
   public static final BinaryOperator<DCList> DICE = new BinaryOperator<>(
       "d", Priorities.DICE, (left, right) -> {
