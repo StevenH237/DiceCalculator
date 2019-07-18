@@ -11,6 +11,7 @@ import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.ComparisonOperators.Comparison;
 import net.nixill.dice.operations.PrefixOperator;
+import net.nixill.dice.operations.SavedFunctions;
 
 public class DiceOperators {
   public static final BinaryOperator<DCList> DICE = new BinaryOperator<>(
@@ -51,45 +52,96 @@ public class DiceOperators {
   
   public static final ComparisonOperators<DCList> ROLL_UNTIL = new ComparisonOperators<>(
       "u", Priorities.DICE, (left, comp, right) -> {
-        double sides = left.getValue().getSingle().getAmount();
+        double sides = Math.floor(left.getValue().getSingle().getAmount());
         double cutoff = right.getValue().getSingle().getAmount();
         
-        // The conditions under which this operator shouldn't work are as
-        // follows:
+        SavedFunctions.unsave("_u");
+        
         boolean error = false;
-        if (cutoff < 1 || cutoff > sides) {
-          // The cutoff range is entirely outside the range of possible
-          // values
-          // It's always an error because
-          // - >=low, >low, !=low, <=high, <high, !=high - match everything
-          // - <=low, <low, =low, >=high, >high, =high - match nothing
-          error = true;
-        } else if (cutoff == 1 || cutoff == sides) {
-          // The cutoff range is exactly the edge of a possible value
-          // Only an error if the comparison is
-          // - (value) >= 1 (matches everything)
-          // - (value) < 1 (matches nothing)
-          // - (value) <= max (matches everything)
-          // - (value) > max (matches nothing)
-          error = (comp.compares(1, cutoff) == comp.compares(sides,
-              cutoff));
-        } else if (cutoff == Math.floor(cutoff)) {
-          // If the cutoff value is an int within the range of possible
-          // values, then do NOT error.
-        } else if (comp == Comparison.MODULO
-            || comp == Comparison.NOT_MODULO) {
-          // For modulo-based comparisons, if the cutoff isn't an int,
-          // multiply it until it is since we only make ints anyway.
-          // For example, the multiples of 1.5 (3/2) that a d6 can make are
-          // just 3 and 6 - the multiples of 3.
-          cutoff = NixMath.float2num(cutoff);
-          if (cutoff > sides) {
+        if (sides < 1) {
+          throw new DiceCalcException(new IllegalArgumentException(
+              "Dice must have at least one side."));
+        } else if (sides == 1) {
+          if (comp == Comparison.MODULO || comp == Comparison.NOT_MODULO) {
+            // Don't allow modulo for decimal dice; modulo requires a
+            // precision too exact to be practical
+            throw new DiceCalcException(new IllegalArgumentException(
+                "Can't roll-until an exact multiple of a decimal."));
+          } else if (cutoff < 0 || cutoff >= 1) {
+            // The cutoff range is entirely outside the range of possible
+            // values
+            // It's always an error because
+            // - >=low, >low, !=low, <=high, <high, !=high - match
+            // everything
+            // - <=low, <low, =low, >=high, >high, =high - match nothing
             error = true;
+          } else if (cutoff == 0) {
+            // The cutoff range is exactly the edge of a possible value
+            // Only an error if the comparison is
+            // - (value) >= 1 (matches everything)
+            // - (value) < 1 (matches nothing)
+            // - (value) <= max (matches everything)
+            // - (value) > max (matches nothing)
+            error = (comp.compares(0, cutoff) == comp
+                .compares(Math.nextDown(1), cutoff));
+          }
+        } else {
+          
+          // The conditions under which this operator shouldn't work are as
+          // follows:
+          if (cutoff < 1 || cutoff > sides) {
+            // The cutoff range is entirely outside the range of possible
+            // values
+            // It's always an error because
+            // - >=low, >low, !=low, <=high, <high, !=high - match
+            // everything
+            // - <=low, <low, =low, >=high, >high, =high - match nothing
+            error = true;
+          } else if (cutoff == 1 || cutoff == sides) {
+            // The cutoff range is exactly the edge of a possible value
+            // Only an error if the comparison is
+            // - (value) >= 1 (matches everything)
+            // - (value) < 1 (matches nothing)
+            // - (value) <= max (matches everything)
+            // - (value) > max (matches nothing)
+            error = (comp.compares(1, cutoff) == comp.compares(sides,
+                cutoff));
+          } else if (cutoff == Math.floor(cutoff)) {
+            // If the cutoff value is an int within the range of possible
+            // values, then do NOT error.
+          } else if (comp == Comparison.MODULO
+              || comp == Comparison.NOT_MODULO) {
+            // For modulo-based comparisons, if the cutoff isn't an int,
+            // multiply it until it is since we only make ints anyway.
+            // For example, the multiples of 1.5 (3/2) that a d6 can make
+            // are
+            // just 3 and 6 - the multiples of 3.
+            cutoff = NixMath.float2num(cutoff);
+            if (cutoff > sides) {
+              error = true;
+            }
+          }
+          // For a not-modulo-based comparison, a decimal is fine; the only
+          // thing about it is that there's no difference between >= and >.
+        }
+        
+        if (error) {
+          throw new DiceCalcException(new IllegalArgumentException(
+              "The range you have selected would result in a pointless roll."));
+        }
+        
+        ArrayList<DCValue> out = new ArrayList<>();
+        
+        for (int i = 0; i < 50; i++) {
+          DCDie die = new DCDie(sides);
+          if (comp.compares(sides, cutoff)) {
+            SavedFunctions.save("_u", die);
+            break;
+          } else {
+            out.add(die);
           }
         }
-        // For a not-modulo-based comparison, a decimal is fine; the only
-        // thing about it is that there's no difference between >= and >.
         
-        return null;
+        return new DCList(out);
       });
 }

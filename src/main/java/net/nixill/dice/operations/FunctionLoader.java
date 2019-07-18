@@ -11,4 +11,6 @@ public abstract class FunctionLoader {
   public abstract void save(String name, DCEntity ent);
   
   public abstract void saveResult(String name, DCValue result);
+  
+  public abstract void unsave(String name);
 }
