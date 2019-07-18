@@ -1,18 +1,23 @@
 package net.nixill.testing;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.junit.Test;
 
-import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
-import net.nixill.dice.operations.SavedFunctions;
-import net.nixill.dice.parsing.ExpressionParser;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
 
 public class AppTest {
+  @Test
+  public void mathTest() {
+    System.out.println("-- BEGIN MATH TEST --");
+    Random rand = new Random();
+
+  }
+
   @Test
   public void tests() {
     System.out.println("-- BEGIN NEW TEST --");

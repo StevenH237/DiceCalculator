@@ -55,12 +55,15 @@ public class ComparisonOperators<T extends DCValue> {
       subsymbol = sym;
       factor = fact;
     }
+
+    public Boolean compares(double left, double right) {
+      return ComparisonOperators.compares(left, this, right);
+    }
   }
 
   public class ComparisonOperator extends BinaryOperator<T> {
     public ComparisonOperator(Comparison comp) {
       super(supersymbol + comp.subsymbol, coPriority, new BiFunction<DCEntity, DCEntity, T>() {
-
         @Override
         public T apply(DCEntity left, DCEntity right) {
           return coFunc.run(left, comp, right);
