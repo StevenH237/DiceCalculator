@@ -14,9 +14,12 @@ import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.operations.SavedFunctions;
 
 /**
- * 
+ * Implementation of the default operators for rolling dice.
  */
 public class DiceOperators {
+  /**
+   * The binary "d" operator, which
+   */
   public static final BinaryOperator<DCList> DICE = new BinaryOperator<>(
       "d", Priorities.DICE, (left, right) -> {
         double count = Math.floor(left.getValue().getSingle().getAmount());
