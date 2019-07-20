@@ -6,8 +6,10 @@ import java.util.Random;
 import org.junit.Test;
 
 import net.nixill.NixMath;
+import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
+import net.nixill.dice.operations.Variables;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
 
@@ -33,6 +35,7 @@ public class AppTest {
   @Test
   public void tests() {
     System.out.println("-- BEGIN NEW TEST --");
+    Variables.setLoader(new Loader());
     
     // v0.1 tests
     testLine("3");
@@ -81,28 +84,42 @@ public class AppTest {
   public void testLine(String input) {
     System.out.println("Input: " + input);
     
-    DCEntity firstParse = ExpressionSplitter.parse(input);
-    String firstString = firstParse.toCode();
-    System.out.println("First parse: " + firstString);
-    
-    DCEntity secondParse = ExpressionSplitter.parse(firstString);
-    String secondString = secondParse.toCode();
-    System.out.println("Second parse: " + secondString);
-    
-    if (!firstString.equals(secondString)) {
-      throw new AssertionError("Expression strings aren't equal!");
-    }
-    
-    DCValue value = secondParse.getValue();
-    String thirdString = value.toCode();
-    System.out.println("Value: " + thirdString);
-    
-    DCEntity fourthParse = ExpressionSplitter.parse(thirdString);
-    String fourthString = fourthParse.toCode();
-    System.out.println("Fourth parse: " + fourthString);
-    
-    if (!thirdString.equals(fourthString)) {
-      throw new AssertionError("Value strings aren't equal!");
+    try {
+      DCEntity firstParse = ExpressionSplitter.parse(input);
+      String firstString = firstParse.toCode();
+      System.out.println("First parse: " + firstString);
+      
+      DCEntity secondParse = ExpressionSplitter.parse(firstString);
+      String secondString = secondParse.toCode();
+      System.out.println("Second parse: " + secondString);
+      
+      if (!firstString.equals(secondString)) {
+        throw new AssertionError("Expression strings aren't equal!");
+      }
+      
+      DCValue value = secondParse.getValue();
+      String thirdString = value.toCode();
+      System.out.println("Value: " + thirdString);
+      
+      DCValue fourthParse = ExpressionSplitter.parse(thirdString)
+          .getValue();
+      String fourthString = fourthParse.toCode();
+      System.out.println("Fourth parse: " + fourthString);
+      
+      if (!thirdString.equals(fourthString)) {
+        throw new AssertionError("Value strings aren't equal!");
+      }
+      
+      System.out.println("\u200b");
+      
+      Variables.save2("_ans", value);
+      if (!input.contains("{_last")) {
+        Variables.save2("_last", firstParse);
+      }
+    } catch (DiceCalcException ex) {
+      System.out.println("\u200b");
+      ex.printStackTrace();
+      throw ex;
     }
   }
   
