@@ -20,9 +20,6 @@ public class ExpressionSplitter {
    * consecutively.
    */
   public static DCEntity parse(String input) {
-    input = input.toLowerCase();
-    input = input.replaceAll("[ `]", "");
-    
     ArrayList<ExpressionPiece> stack = split(input);
     DCEntity ent = ExpressionParser.parseLine(stack);
     

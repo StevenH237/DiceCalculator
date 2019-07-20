@@ -6,7 +6,6 @@ import java.util.Random;
 import org.junit.Test;
 
 import net.nixill.NixMath;
-import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
 import net.nixill.dice.operations.Variables;
@@ -116,7 +115,7 @@ public class AppTest {
       if (!input.contains("{_last")) {
         Variables.save2("_last", firstParse);
       }
-    } catch (DiceCalcException ex) {
+    } catch (Exception ex) {
       System.out.println("\u200b");
       ex.printStackTrace();
       throw ex;

@@ -24,6 +24,8 @@ public class ComparisonOperators<T extends DCValue> {
       Comparison.NOT_LESS);
   public final ComparisonOperator MODULO      = new ComparisonOperator(
       Comparison.MODULO);
+  public final ComparisonOperator NOT_MODULO  = new ComparisonOperator(
+      Comparison.NOT_MODULO);
   
   public ComparisonOperators(String symbol, int priority,
       ComparisonFunction<T> func) {

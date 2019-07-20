@@ -52,9 +52,9 @@ public abstract class DCEntity {
   
   protected static String numToString(double number) {
     if (number == Math.floor(number)) {
-      return String.format("%0f", number);
+      return String.format("%.0f", number);
     } else {
-      return String.format("%2f", number);
+      return String.format("%.2f", number);
     }
   }
   

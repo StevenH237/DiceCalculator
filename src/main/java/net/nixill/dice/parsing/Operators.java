@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.nixill.dice.defaults.operations.DiceOperators;
 import net.nixill.dice.defaults.operations.ListOperators;
 import net.nixill.dice.defaults.operations.MathsOperators;
 import net.nixill.dice.exception.UserInputException;
 import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
@@ -53,6 +55,10 @@ public class Operators {
     putOperator(MathsOperators.INT_DIVIDE);
     putOperator(MathsOperators.MODULO);
     putOperator(MathsOperators.DUO_DIVIDE);
+
+    putOperator(DiceOperators.DICE);
+    putOperator(DiceOperators.ONE_DIE);
+    putOperator(DiceOperators.ROLL_UNTIL);
     
     initRegexes();
   }
@@ -184,6 +190,23 @@ public class Operators {
    */
   public static void putOperator(BinaryOperator<?> oper) {
     binaryOperators.put(oper.getSymbol(), oper);
+  }
+
+  /**
+   * Add all of a {@link ComparisonOperators}' set to the list of recognized operators.
+   * 
+   * @param opers
+   *   The operator set to add 
+   */
+  public static void putOperator(ComparisonOperators<?> opers) {
+    putOperator(opers.EQUAL);
+    putOperator(opers.NOT_LESS);
+    putOperator(opers.GREATER);
+    putOperator(opers.NOT_EQUAL);
+    putOperator(opers.LESS);
+    putOperator(opers.NOT_GREATER);
+    putOperator(opers.MODULO);
+    putOperator(opers.NOT_MODULO);
   }
   
   /**
