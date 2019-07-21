@@ -21,4 +21,8 @@ public class PostfixOperator<R extends DCValue> extends UnaryOperator<R> {
   public PostfixOperator(String symbol, int priority, Function<DCEntity, R> func) {
     super(symbol, priority, true, func);
   }
+
+  public String toString() {
+    return "post:" + symbol;
+  }
 }

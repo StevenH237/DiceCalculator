@@ -85,4 +85,5 @@ public abstract class Operator {
     return symbol;
   }
 
+  public abstract String toString();
 }

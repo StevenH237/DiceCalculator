@@ -2,11 +2,11 @@ package net.nixill.dice.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
-import net.nixill.dice.operations.SavedFunctions;
-import net.nixill.dice.parsing.UserInputException;
+import net.nixill.dice.exception.DiceCalcException;
+import net.nixill.dice.exception.NoSuchFunctionException;
+import net.nixill.dice.operations.Functions;
 
 /**
  * A named function, with or without parameters.
@@ -46,14 +46,9 @@ public class DCFunction extends DCExpression {
     DCEntity ent = getSaved();
 
     if (ent instanceof DCExpression) {
-      HashMap<String, DCEntity> pars = new HashMap<>();
-      for (int i = 0; i < params.size(); i++) {
-        pars.put(i + 1 + "", params.get(i));
-      }
-
-      HashMap<String, DCEntity> preFuncs = SavedFunctions.setFunctions(pars);
+      Functions.stackParams(params);
       DCValue val = ent.getValue();
-      SavedFunctions.setFunctions(preFuncs);
+      Functions.unstackParams();
 
       return val;
     } else {
@@ -67,21 +62,20 @@ public class DCFunction extends DCExpression {
    * @return The named entity
    */
   public DCEntity getSaved() {
-    HashMap<String, DCEntity> funcs = SavedFunctions.getAllMerged();
+    DCEntity ent = null;
 
-    DCEntity ent = funcs.get(name);
+    try {
+      ent = Functions.get(name);
+    } catch (IndexOutOfBoundsException ex) {
+      if (params.size() >= 1) {
+        ent = params.get(0);
+      } else {
+        throw new DiceCalcException(ex);
+      }
+    }
 
     if (ent == null) {
-      try {
-        Integer.parseInt(name);
-        if (params.size() >= 1) {
-          ent = params.get(0);
-        } else {
-          throw new UserInputException("Function doesn't have " + name + " param(s).", -1);
-        }
-      } catch (NumberFormatException ex) {
-        throw new UserInputException("Unknown function or variable " + name, -1);
-      }
+      throw new NoSuchFunctionException("The function `" + name + "` does not exist.");
     }
 
     return ent;
@@ -97,28 +91,24 @@ public class DCFunction extends DCExpression {
   }
 
   @Override
-  public String toString() {
+  public String toString(int lvl) {
     String out = "{" + name;
     for (DCEntity ent : params) {
-      out += "," + ent.toShortString();
+      out += ", " + ent.toString(lvl - 1);
     }
     return out + "}";
   }
 
   @Override
-  public String toShortString() {
-    return "{" + name + "," + params.size() + " params}";
-  }
-
-  @Override
-  public String toLongString() {
+  public String toCode() {
     String out = "{" + name;
     for (DCEntity ent : params) {
-      out += "," + ent.toLongString();
+      out += "," + ent.toCode();
     }
     return out + "}";
   }
 
+  @Override
   public void printTree(int level) {
     printSpaced(level, "Function \"" + name + "\": " + params.size() + " param(s)");
     for (DCEntity ent : params) {

@@ -1,4 +1,4 @@
-package net.nixill.dice.operations.defaults;
+package net.nixill.dice.defaults.operations;
 
 import net.nixill.dice.operations.Operator;
 
@@ -17,6 +17,11 @@ public final class Priorities {
    * The priority of "+" and binary "-", which is 0.
    */
   public static final int JOIN = 0;
+  
+  /**
+   * The priority of "d", which is 50.
+   */
+  public static final int DICE = JOIN + 50;
   
   /**
    * The priority of prefix "#" and "$", which is -5.

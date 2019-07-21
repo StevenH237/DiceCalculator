@@ -30,10 +30,16 @@ public class DCNumber extends DCSingle {
   }
 
   @Override
-  public String toLongString() {
-    return toString();
+  public String toString(int lvl) {
+    return numFormat.format(value);
   }
 
+  @Override
+  public String toCode() {
+    return codeFormat.format(value);
+  }
+
+  @Override
   public void printTree(int level) {
     printSpaced(level, "Number " + value);
   }
