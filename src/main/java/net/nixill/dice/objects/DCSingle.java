@@ -15,6 +15,7 @@ public abstract class DCSingle extends DCValue {
   /**
    * Returns this DCSingle itself.
    */
+  @Override
   public DCSingle getSingle() {
     return this;
   }
@@ -22,6 +23,7 @@ public abstract class DCSingle extends DCValue {
   /**
    * Returns this DCSingle as a DCList (containing only itself).
    */
+  @Override
   public DCList getList() {
     ArrayList<DCValue> items = new ArrayList<>();
     items.add(this);
@@ -46,6 +48,10 @@ public abstract class DCSingle extends DCValue {
     return potential;
   }
 
+  /**
+   * Returns this DCSingle as a DCString (by converting it to a number).
+   */
+  @Override
   public DCString getString() {
     return new DCString(this.toString());
   }

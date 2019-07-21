@@ -14,7 +14,13 @@ import net.nixill.dice.parsing.ExpressionSplitter;
 public abstract class DCEntity {
   public abstract DCValue getValue();
 
+  /**
+   * A number formatter for decimals.
+   */
   protected static DecimalFormat numFormat = new DecimalFormat("#.###");
+  /**
+   * A number formatter for code.
+   */
   protected static DecimalFormat codeFormat = new DecimalFormat("#.#################");
 
   /**

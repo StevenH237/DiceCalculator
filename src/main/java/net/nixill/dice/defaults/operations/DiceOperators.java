@@ -18,7 +18,12 @@ import net.nixill.dice.operations.Variables;
  */
 public class DiceOperators {
   /**
-   * The binary "d" operator, which
+   * The binary "d" operator, which rolls a set number of dice.
+   * <ul>
+   * <li>left operand - number: The number of dice to roll.</li>
+   * <li>right operand - number: The number of sides for each die.</li>
+   * <li>Returns - list: The list of rolled dice.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCList> DICE = new BinaryOperator<>("d", Priorities.DICE, (left, right) -> {
     double count = Math.floor(left.getValue().getSingle().getAmount());
@@ -40,6 +45,13 @@ public class DiceOperators {
     return new DCList(out);
   });
 
+  /**
+   * The prefix "d" operator, which rolls a single die.
+   * <ul>
+   * <li>operand - number: The number of sides for the die.</li>
+   * <li>Returns - list: The list of rolled dice.</li>
+   * </ul>
+   */
   public static final PrefixOperator<DCDie> ONE_DIE = new PrefixOperator<>("d", Priorities.DICE, (ent) -> {
     double sides = Math.floor(ent.getValue().getSingle().getAmount());
 
@@ -50,6 +62,19 @@ public class DiceOperators {
     return new DCDie(sides);
   });
 
+  /**
+   * The set of comparison-based "u" operators, which rolls dice until one matches
+   * the comparison.
+   * <p>
+   * The die that ends the streak will not be included in the list, but saved to
+   * the variable <code>{_u}</code>.
+   * <ul>
+   * <li>left operand - number: The number of sides for each die.</li>
+   * <li>right operand - comparison: The comparison which, when a die is rolled
+   * that satisfies it, ends the rolling streak.</li>
+   * <li>Returns - list: The list of rolled dice.</li>
+   * </ul>
+   */
   public static final ComparisonOperators<DCList> ROLL_UNTIL = new ComparisonOperators<>("u", Priorities.DICE,
       (left, comp, right) -> {
         double sides = Math.floor(left.getValue().getSingle().getAmount());

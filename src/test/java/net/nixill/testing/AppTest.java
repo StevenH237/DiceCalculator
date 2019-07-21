@@ -1,11 +1,9 @@
 package net.nixill.testing;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.junit.Test;
 
-import net.nixill.NixMath;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
 import net.nixill.dice.operations.Variables;

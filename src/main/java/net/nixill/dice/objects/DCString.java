@@ -2,18 +2,30 @@ package net.nixill.dice.objects;
 
 import java.util.ArrayList;
 
+/**
+ * A string of text.
+ */
 public class DCString extends DCValue {
   private String value;
 
+  /**
+   * Creates a new string from the given text.
+   */
   public DCString(String val) {
     value = val;
   }
 
+  /**
+   * Returns this String as a number by taking its length.
+   */
   @Override
   public DCSingle getSingle() {
-    return getList().getSingle();
+    return new DCNumber(value.length());
   }
 
+  /**
+   * Returns this String as a list by taking all of its character codes.
+   */
   @Override
   public DCList getList() {
     char[] chars = value.toCharArray();
@@ -27,6 +39,9 @@ public class DCString extends DCValue {
     return new DCList(out);
   }
 
+  /**
+   * Returns this String itself.
+   */
   @Override
   public DCString getString() {
     return this;

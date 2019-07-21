@@ -5,9 +5,18 @@ import java.util.function.Function;
 
 import net.nixill.dice.operations.Variables;
 
+/**
+ * A DCCodeFunction is an entity that can execute code on the parameters passed
+ * into it.
+ */
 public class DCCodeFunction extends DCExpression {
   private Function<ArrayList<DCEntity>, DCValue> code;
 
+  /**
+   * Creates a new DCCodeFunction.
+   * 
+   * @param func The code to run.
+   */
   public DCCodeFunction(Function<ArrayList<DCEntity>, DCValue> func) {
     code = func;
   }
@@ -17,6 +26,9 @@ public class DCCodeFunction extends DCExpression {
     return getValue(Variables.getParams());
   }
 
+  /**
+   * Runs the function with the given parameters.
+   */
   public DCValue getValue(ArrayList<DCEntity> params) {
     return code.apply(params);
   }

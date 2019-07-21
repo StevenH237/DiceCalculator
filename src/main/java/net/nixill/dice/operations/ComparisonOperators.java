@@ -5,20 +5,54 @@ import java.util.function.BiFunction;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
 
+/**
+ * A set of eight {@link BinaryOperator}s based on a comparison.
+ */
 public class ComparisonOperators<T extends DCValue> {
   private ComparisonFunction<T> coFunc;
   private String supersymbol;
   private int coPriority;
 
+  /**
+   * This ComparisonOperator made with a greater than sign.
+   */
   public final ComparisonOperator GREATER;
+  /**
+   * This ComparisonOperator made with an equals sign.
+   */
   public final ComparisonOperator EQUAL;
+  /**
+   * This ComparisonOperator made with a less than sign.
+   */
   public final ComparisonOperator LESS;
+  /**
+   * This ComparisonOperator made with a less than or equal to sign.
+   */
   public final ComparisonOperator NOT_GREATER;
+  /**
+   * This ComparisonOperator made with a not-equals sign.
+   */
   public final ComparisonOperator NOT_EQUAL;
+  /**
+   * This ComparisonOperator made with a greater than or equal to sign.
+   */
   public final ComparisonOperator NOT_LESS;
+  /**
+   * This ComparisonOperator made with a modulo sign.
+   */
   public final ComparisonOperator MODULO;
+  /**
+   * This ComparisonOperator made with a not modulo sign.
+   */
   public final ComparisonOperator NOT_MODULO;
 
+  /**
+   * Creates a new set of ComparisonOperators.
+   * 
+   * @param symbol   The symbol to use as a base.
+   * @param priority The priority of the resulting operators.
+   * @param func     The function to perform.
+   */
   public ComparisonOperators(String symbol, int priority, ComparisonFunction<T> func) {
     this.supersymbol = symbol;
     this.coPriority = priority;
@@ -34,9 +68,14 @@ public class ComparisonOperators<T extends DCValue> {
     NOT_MODULO = new ComparisonOperator(Comparison.NOT_MODULO);
   }
 
+  /**
+   * Returns the result of comparing two numbers with the given comparison.
+   */
   public static boolean compares(double left, Comparison comp, double right) {
     if (comp == Comparison.MODULO) {
       return (left % right) == 0;
+    } else if (comp == Comparison.NOT_MODULO) {
+      return (left % right) != 0;
     }
 
     if (left < right) {
