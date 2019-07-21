@@ -11,7 +11,7 @@ import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.ComparisonOperators.Comparison;
 import net.nixill.dice.operations.PrefixOperator;
-import net.nixill.dice.operations.Variables;
+import net.nixill.dice.operations.Functions;
 
 /**
  * Implementation of the default operators for rolling dice.
@@ -80,7 +80,7 @@ public class DiceOperators {
         double sides = Math.floor(left.getValue().getSingle().getAmount());
         double cutoff = right.getValue().getSingle().getAmount();
 
-        Variables.save2("_u", null);
+        Functions.save2("_u", null);
 
         boolean error = false;
         if (sides < 1) {
@@ -156,7 +156,7 @@ public class DiceOperators {
         for (int i = 0; i < 50; i++) {
           DCDie die = new DCDie(sides);
           if (comp.compares(die.getAmount(), cutoff)) {
-            Variables.save2("_u", die);
+            Functions.save2("_u", die);
             break;
           } else {
             out.add(die);

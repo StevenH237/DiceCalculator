@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.exception.NoSuchFunctionException;
-import net.nixill.dice.operations.Variables;
+import net.nixill.dice.operations.Functions;
 
 /**
  * A named function, with or without parameters.
@@ -46,9 +46,9 @@ public class DCFunction extends DCExpression {
     DCEntity ent = getSaved();
 
     if (ent instanceof DCExpression) {
-      Variables.stackParams(params);
+      Functions.stackParams(params);
       DCValue val = ent.getValue();
-      Variables.unstackParams();
+      Functions.unstackParams();
 
       return val;
     } else {
@@ -65,7 +65,7 @@ public class DCFunction extends DCExpression {
     DCEntity ent = null;
 
     try {
-      ent = Variables.get(name);
+      ent = Functions.get(name);
     } catch (IndexOutOfBoundsException ex) {
       if (params.size() >= 1) {
         ent = params.get(0);

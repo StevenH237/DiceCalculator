@@ -3,7 +3,7 @@ package net.nixill.dice.objects;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import net.nixill.dice.operations.Variables;
+import net.nixill.dice.operations.Functions;
 
 /**
  * A DCCodeFunction is an entity that can execute code on the parameters passed
@@ -23,7 +23,7 @@ public class DCCodeFunction extends DCExpression {
 
   @Override
   public DCValue getValue() {
-    return getValue(Variables.getParams());
+    return getValue(Functions.getParams());
   }
 
   /**

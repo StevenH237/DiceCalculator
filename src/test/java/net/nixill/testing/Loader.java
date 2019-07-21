@@ -4,10 +4,10 @@ import net.nixill.dice.exception.NoSuchFunctionException;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCValue;
-import net.nixill.dice.operations.VariableLoader;
+import net.nixill.dice.operations.FunctionLoader;
 import net.nixill.dice.parsing.ExpressionSplitter;
 
-public class Loader extends VariableLoader {
+public class Loader extends FunctionLoader {
   private static FunctionState LEVEL = new FunctionState(ExpressionSplitter.parse("({1,5}^2+{1,5})/2"));
   private static FunctionState _LAST = new FunctionState(new DCNumber(0));
   private static FunctionState _ANS = new FunctionState(new DCNumber(0));

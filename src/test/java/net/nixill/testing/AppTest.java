@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
-import net.nixill.dice.operations.Variables;
+import net.nixill.dice.operations.Functions;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
 
@@ -32,7 +32,7 @@ public class AppTest {
   @Test
   public void tests() {
     System.out.println("-- BEGIN NEW TEST --");
-    Variables.setLoader(new Loader());
+    Functions.setLoader(new Loader());
 
     // v0.1 tests
     // testLine("3");
@@ -110,9 +110,9 @@ public class AppTest {
 
       System.out.println("\u200b");
 
-      Variables.save2("_ans", value);
+      Functions.save2("_ans", value);
       if (!input.contains("{_last")) {
-        Variables.save2("_last", firstParse);
+        Functions.save2("_last", firstParse);
       }
     } catch (Exception ex) {
       System.out.println("\u200b");

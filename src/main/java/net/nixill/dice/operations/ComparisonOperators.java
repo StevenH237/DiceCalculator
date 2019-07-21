@@ -69,48 +69,95 @@ public class ComparisonOperators<T extends DCValue> {
   }
 
   /**
-   * Returns the result of comparing two numbers with the given comparison.
+   * The function of a {@link ComparisonOperator} which accepts two
+   * {@link DCEntity}s and a {@link Comparison} to produce a result.
+   * 
+   * @param <T> The type of the result of the function.
    */
-  public static boolean compares(double left, Comparison comp, double right) {
-    if (comp == Comparison.MODULO) {
-      return (left % right) == 0;
-    } else if (comp == Comparison.NOT_MODULO) {
-      return (left % right) != 0;
-    }
-
-    if (left < right) {
-      return (comp.factor % 5) == 0;
-    } else if (left == right) {
-      return (comp.factor % 3) == 0;
-    } else if (left > right) {
-      return (comp.factor % 2) == 0;
-    }
-
-    return false;
-  }
-
   @FunctionalInterface
   public static interface ComparisonFunction<T extends DCValue> {
+    /**
+     * Runs this function.
+     */
     public T run(DCEntity left, Comparison comp, DCEntity right);
   }
 
+  /**
+   * A comparison that produces a boolean result when given two numbers.
+   */
   public static enum Comparison {
-    GREATER(">", 2), EQUAL("=", 3), LESS("<", 5), NOT_GREATER("<=", 15), NOT_EQUAL("!=", 10), NOT_LESS(">=", 6),
-    MODULO("%", 0), NOT_MODULO("!%", 0);
-    private String subsymbol;
-    private int factor;
+    /**
+     * The greater-than comparison (<code>left > right</code>).
+     */
+    GREATER(">", (left, right) -> (left > right)),
+    /**
+     * The equal-to comparison (<code>left == right</code>).
+     */
+    EQUAL("=", (left, right) -> (left == right)),
+    /**
+     * The less-than comparison (<code>left < right</code>).
+     */
+    LESS("<", (left, right) -> (left < right)),
+    /**
+     * The less-than-or-equal-to (or not-greater-than) comparison
+     * (<code>left <= right</code>).
+     */
+    NOT_GREATER("<=", (left, right) -> (left <= right)),
+    /**
+     * The not-equal-to (or less-than-or-greater-than) comparison
+     * (<code>left != right</code>).
+     */
+    NOT_EQUAL("!=", (left, right) -> (left != right)),
+    /**
+     * The greater-than-or-equal-to (or not-less-than) comparison
+     * (<code>left >= right</code>).
+     */
+    NOT_LESS(">=", (left, right) -> (left >= right)),
+    /**
+     * The modulo comparison, which returns <code>true</code> iff <code>left</code>
+     * is a multiple of <code>right</code> (<code>left % right == 0</code>).
+     */
+    MODULO("%", (left, right) -> ((left % right) == 0)),
+    /**
+     * The not-modulo comparison, which is the opposite of {@link #MODULO}
+     * (<code>left % right != 0</code>).
+     */
+    NOT_MODULO("!%", (left, right) -> ((left % right) != 0));
 
-    private Comparison(String sym, int fact) {
+    private String subsymbol;
+    private CompareFunction<Double> func;
+
+    private Comparison(String sym, CompareFunction<Double> comp) {
       subsymbol = sym;
-      factor = fact;
+      func = comp;
     }
 
-    public Boolean compares(double left, double right) {
-      return ComparisonOperators.compares(left, this, right);
+    /**
+     * Returns the result of two numbers surrounding this {@link Comparison}.
+     */
+    public boolean compares(double left, double right) {
+      return func.compares(left, right);
+    }
+
+    /**
+     * A function that returns true iff the two parameters satisfy the given
+     * comparison.
+     */
+    public static interface CompareFunction<T> {
+      public boolean compares(T left, T right);
     }
   }
 
+  /**
+   * An individual ComparisonOperator, made from the set of eight with a specific
+   * {@link Comparison}.
+   */
   public class ComparisonOperator extends BinaryOperator<T> {
+    /**
+     * Creates the ComparisonOperator.
+     * 
+     * @param comp The comparison to use.
+     */
     public ComparisonOperator(Comparison comp) {
       super(supersymbol + comp.subsymbol, coPriority, new BiFunction<DCEntity, DCEntity, T>() {
         @Override

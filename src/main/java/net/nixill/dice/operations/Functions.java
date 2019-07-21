@@ -11,10 +11,11 @@ import net.nixill.dice.objects.DCCodeFunction;
 import net.nixill.dice.objects.DCEntity;
 
 /**
- * A class that provides access to save and load {@link Function}s.
+ * A class that provides access to save and load {@link Function}s and
+ * Variables.
  */
-public class Variables {
-  private static VariableLoader loader;
+public class Functions {
+  private static FunctionLoader loader;
   private static ThreadLocal<ArrayList<ArrayList<DCEntity>>> params;
   private static ThreadLocal<HashMap<String, String>> env;
   private static HashMap<String, DCCodeFunction> builtins;
@@ -39,18 +40,33 @@ public class Variables {
     builtins.put("!c", DieCoinFunctions.COIN);
   }
 
-  public static void setLoader(VariableLoader loader) {
-    Variables.loader = loader;
+  /**
+   * Sets the {@link FunctionLoader} to use for loading functions.
+   * 
+   * @param loader The loader to use.
+   */
+  public static void setLoader(FunctionLoader loader) {
+    Functions.loader = loader;
   }
 
   private static ArrayList<ArrayList<DCEntity>> getStack() {
     return params.get();
   }
 
+  /**
+   * Sets numbered function parameters to a given list, hiding the current ones
+   * under it.
+   * 
+   * @param pars The list to put down on the stack.
+   */
   public static void stackParams(ArrayList<DCEntity> pars) {
     getStack().add(0, pars);
   }
 
+  /**
+   * Removes the most recent list of function parameters, expositing the list
+   * beneath it.
+   */
   public static void unstackParams() {
     ArrayList<ArrayList<DCEntity>> stack = getStack();
     if (stack.size() > 0) {
@@ -58,6 +74,12 @@ public class Variables {
     }
   }
 
+  /**
+   * Gets the most recent list of function parameters, but leaves it atop the
+   * stack.
+   * 
+   * @return The list from the top of the stack.
+   */
   public static ArrayList<DCEntity> getParams() {
     ArrayList<ArrayList<DCEntity>> stack = getStack();
     if (stack.size() > 0) {
@@ -67,6 +89,12 @@ public class Variables {
     }
   }
 
+  /**
+   * Get a variable with a given name.
+   * 
+   * @param name The name to get.
+   * @return The value of that variable.
+   */
   public static DCEntity get(String name) {
     // All function names must be lowercase
     name = name.toLowerCase();
@@ -113,6 +141,13 @@ public class Variables {
     }
   }
 
+  /**
+   * Save a value to a variable.
+   * 
+   * @param name The name of the variable to save.
+   * @param ent  The entity to save to that variable. Use <code>null</code> to
+   *             remove.
+   */
   public static void save(String name, DCEntity ent) {
     // All function names must be lowercase
     name = name.toLowerCase();
@@ -148,6 +183,12 @@ public class Variables {
     }
   }
 
+  /**
+   * Saves a variable; this method allows saving environment variables.
+   * 
+   * @param name The name to save
+   * @param ent  The entity to save
+   */
   public static void save2(String name, DCEntity ent) {
     name = name.toLowerCase();
 
@@ -158,11 +199,24 @@ public class Variables {
     }
   }
 
-  public String getEnv(String name) {
+  /**
+   * Gets the value of a thread variable.
+   * 
+   * @param name The name of the variable to retrieve.
+   * @return The value of the named variable.
+   */
+  public String getThread(String name) {
     return env.get().get(name);
   }
 
-  public String setEnv(String name, String value) {
+  /**
+   * Sets the value of a thread variable.
+   * 
+   * @param name  The name of the variable to set.
+   * @param value The value to set.
+   * @return The previous value, or <code>null</code> if none.
+   */
+  public String setThread(String name, String value) {
     return env.get().put(name, value);
   }
 }
