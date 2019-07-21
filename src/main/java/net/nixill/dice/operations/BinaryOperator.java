@@ -33,4 +33,8 @@ public class BinaryOperator<R extends DCValue> extends Operator {
   public R run(DCEntity left, DCEntity right) {
     return func.apply(left, right);
   }
+
+  public String toString() {
+    return "bin:" + symbol;
+  }
 }

@@ -21,4 +21,8 @@ public class PrefixOperator<R extends DCValue> extends UnaryOperator<R> {
   public PrefixOperator(String symbol, int priority, Function<DCEntity, R> func) {
     super(symbol, priority, false, func);
   }
+
+  public String toString() {
+    return "pre:" + symbol;
+  }
 }

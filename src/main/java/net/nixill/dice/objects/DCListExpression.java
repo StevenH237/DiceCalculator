@@ -49,6 +49,10 @@ public class DCListExpression extends DCExpression {
 
   @Override
   public String toString(int lvl) {
+    if (listItems.isEmpty()) {
+      return "[]";
+    }
+
     String out = "[";
     for (DCEntity ent : listItems) {
       out += ent.toString(lvl - 1) + ", ";
@@ -59,6 +63,10 @@ public class DCListExpression extends DCExpression {
 
   @Override
   public String toCode() {
+    if (listItems.isEmpty()) {
+      return "[]";
+    }
+
     String out = "[";
     for (DCEntity ent : listItems) {
       out += ent.toCode() + ",";

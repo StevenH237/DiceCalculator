@@ -33,7 +33,7 @@ public class DCDie extends DCSingle {
     sides = Math.floor(sides);
     potential = sides;
     if (sides >= 2) {
-      value = (double) (Randomizer.get().nextInt((int) sides + 1));
+      value = (double) (Randomizer.get().nextInt((int) sides) + 1);
     } else if (sides == 1) {
       value = Randomizer.get().nextDouble();
     } else {
@@ -52,16 +52,16 @@ public class DCDie extends DCSingle {
 
   @Override
   public String toString(int level) {
-    return numToString(value);
+    return numFormat.format(value);
   }
 
   @Override
   public String toCode() {
-    return "{!d," + value + "," + potential + "}";
+    return "{!d," + codeFormat.format(value) + "," + codeFormat.format(potential) + "}";
   }
 
   @Override
   public void printTree(int level) {
-    printSpaced(level, "Die: " + numToString(value) + " (d" + numToString(potential) + ")");
+    printSpaced(level, "Die: " + numFormat.format(value) + " (d" + numFormat.format(potential) + ")");
   }
 }

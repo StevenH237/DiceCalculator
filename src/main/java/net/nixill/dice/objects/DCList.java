@@ -80,6 +80,10 @@ public class DCList extends DCValue {
 
   @Override
   public String toString(int lvl) {
+    if (listItems.isEmpty()) {
+      return "0 []";
+    }
+
     String out = getSingle().getAmount() + " [";
     for (DCValue val : listItems) {
       out += val.toString(lvl - 1) + ", ";
@@ -90,6 +94,10 @@ public class DCList extends DCValue {
 
   @Override
   public String toCode() {
+    if (listItems.isEmpty()) {
+      return "[]";
+    }
+
     String out = "[";
     for (DCValue val : listItems) {
       out += val.toCode() + ",";

@@ -31,12 +31,12 @@ public class DCNumber extends DCSingle {
 
   @Override
   public String toString(int lvl) {
-    return numToString(value);
+    return numFormat.format(value);
   }
 
   @Override
   public String toCode() {
-    return "" + value;
+    return codeFormat.format(value);
   }
 
   @Override

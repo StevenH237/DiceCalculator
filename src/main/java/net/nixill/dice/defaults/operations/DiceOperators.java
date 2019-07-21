@@ -20,59 +20,52 @@ public class DiceOperators {
   /**
    * The binary "d" operator, which
    */
-  public static final BinaryOperator<DCList> DICE = new BinaryOperator<>(
-      "d", Priorities.DICE, (left, right) -> {
-        double count = Math.floor(left.getValue().getSingle().getAmount());
-        double sides = Math
-            .floor(right.getValue().getSingle().getAmount());
-        
-        if (count < 1) {
-          throw new DiceCalcException(new IllegalArgumentException(
-              "You must roll at least one die."));
-        }
-        
-        if (sides < 1) {
-          throw new DiceCalcException(new IllegalArgumentException(
-              "Dice must have at least one side."));
-        }
-        
-        ArrayList<DCValue> out = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-          out.add(new DCDie(sides));
-        }
-        
-        return new DCList(out);
-      });
-  
-  public static final PrefixOperator<DCDie> ONE_DIE = new PrefixOperator<>(
-      "d", Priorities.DICE, (ent) -> {
-        double sides = Math.floor(ent.getValue().getSingle().getAmount());
-        
-        if (sides < 1) {
-          throw new DiceCalcException(new IllegalArgumentException(
-              "Dice must have at least one side."));
-        }
-        
-        return new DCDie(sides);
-      });
-  
-  public static final ComparisonOperators<DCList> ROLL_UNTIL = new ComparisonOperators<>(
-      "u", Priorities.DICE, (left, comp, right) -> {
+  public static final BinaryOperator<DCList> DICE = new BinaryOperator<>("d", Priorities.DICE, (left, right) -> {
+    double count = Math.floor(left.getValue().getSingle().getAmount());
+    double sides = Math.floor(right.getValue().getSingle().getAmount());
+
+    if (count < 1) {
+      throw new DiceCalcException(new IllegalArgumentException("You must roll at least one die."));
+    }
+
+    if (sides < 1) {
+      throw new DiceCalcException(new IllegalArgumentException("Dice must have at least one side."));
+    }
+
+    ArrayList<DCValue> out = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      out.add(new DCDie(sides));
+    }
+
+    return new DCList(out);
+  });
+
+  public static final PrefixOperator<DCDie> ONE_DIE = new PrefixOperator<>("d", Priorities.DICE, (ent) -> {
+    double sides = Math.floor(ent.getValue().getSingle().getAmount());
+
+    if (sides < 1) {
+      throw new DiceCalcException(new IllegalArgumentException("Dice must have at least one side."));
+    }
+
+    return new DCDie(sides);
+  });
+
+  public static final ComparisonOperators<DCList> ROLL_UNTIL = new ComparisonOperators<>("u", Priorities.DICE,
+      (left, comp, right) -> {
         double sides = Math.floor(left.getValue().getSingle().getAmount());
         double cutoff = right.getValue().getSingle().getAmount();
-        
+
         Variables.save2("_u", null);
-        
+
         boolean error = false;
         if (sides < 1) {
-          throw new DiceCalcException(new IllegalArgumentException(
-              "Dice must have at least one side."));
+          throw new DiceCalcException(new IllegalArgumentException("Dice must have at least one side."));
         } else if (sides == 1) {
           if (comp == Comparison.MODULO || comp == Comparison.NOT_MODULO) {
             // Don't allow modulo for decimal dice; modulo requires a
             // precision too exact to be practical
-            throw new DiceCalcException(new IllegalArgumentException(
-                "Can't roll-until an exact multiple of a decimal."));
+            throw new DiceCalcException(
+                new IllegalArgumentException("Can't roll-until an exact multiple of a decimal."));
           } else if (cutoff < 0 || cutoff >= 1) {
             // The cutoff range is entirely outside the range of possible
             // values
@@ -88,11 +81,10 @@ public class DiceOperators {
             // - (value) < 1 (matches nothing)
             // - (value) <= max (matches everything)
             // - (value) > max (matches nothing)
-            error = (comp.compares(0, cutoff) == comp
-                .compares(Math.nextDown(1), cutoff));
+            error = (comp.compares(0, cutoff) == comp.compares(Math.nextDown(1), cutoff));
           }
         } else {
-          
+
           // The conditions under which this operator shouldn't work are as
           // follows:
           if (cutoff < 1 || cutoff > sides) {
@@ -110,13 +102,11 @@ public class DiceOperators {
             // - (value) < 1 (matches nothing)
             // - (value) <= max (matches everything)
             // - (value) > max (matches nothing)
-            error = (comp.compares(1, cutoff) == comp.compares(sides,
-                cutoff));
+            error = (comp.compares(1, cutoff) == comp.compares(sides, cutoff));
           } else if (cutoff == Math.floor(cutoff)) {
             // If the cutoff value is an int within the range of possible
             // values, then do NOT error.
-          } else if (comp == Comparison.MODULO
-              || comp == Comparison.NOT_MODULO) {
+          } else if (comp == Comparison.MODULO || comp == Comparison.NOT_MODULO) {
             // For modulo-based comparisons, if the cutoff isn't an int,
             // multiply it until it is since we only make ints anyway.
             // For example, the multiples of 1.5 (3/2) that a d6 can make
@@ -130,24 +120,24 @@ public class DiceOperators {
           // For a not-modulo-based comparison, a decimal is fine; the only
           // thing about it is that there's no difference between >= and >.
         }
-        
+
         if (error) {
-          throw new DiceCalcException(new IllegalArgumentException(
-              "The range you have selected would result in a pointless roll."));
+          throw new DiceCalcException(
+              new IllegalArgumentException("The range you have selected would result in a pointless roll."));
         }
-        
+
         ArrayList<DCValue> out = new ArrayList<>();
-        
+
         for (int i = 0; i < 50; i++) {
           DCDie die = new DCDie(sides);
-          if (comp.compares(sides, cutoff)) {
-            Variables.save("_u", die);
+          if (comp.compares(die.getAmount(), cutoff)) {
+            Variables.save2("_u", die);
             break;
           } else {
             out.add(die);
           }
         }
-        
+
         return new DCList(out);
       });
 }

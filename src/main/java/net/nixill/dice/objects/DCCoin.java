@@ -76,12 +76,12 @@ public class DCCoin extends DCSingle {
     } else {
       out += "0";
     }
-    out += "," + value + "}";
+    out += "," + codeFormat.format(value) + "}";
     return out;
   }
 
   @Override
   public void printTree(int level) {
-    printSpaced(level, "Coin: " + toString() + " (" + numToString(value) + ")");
+    printSpaced(level, "Coin: " + toString() + " (" + numFormat.format(value) + ")");
   }
 }
