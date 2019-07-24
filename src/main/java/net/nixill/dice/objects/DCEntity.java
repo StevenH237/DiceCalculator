@@ -22,7 +22,7 @@ public abstract class DCEntity {
    * A number formatter for code.
    */
   protected static DecimalFormat codeFormat = new DecimalFormat(
-      "#.#################");
+      "#.#################;(-#.#################)");
   
   /**
    * Returns a string representation of the entity.
