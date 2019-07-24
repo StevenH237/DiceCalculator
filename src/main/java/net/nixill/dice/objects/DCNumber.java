@@ -11,12 +11,12 @@ public class DCNumber extends DCSingle {
     this.value = value;
     this.potential = potential;
   }
-
+  
   /**
    * Creates an arbitrary number with an arbitrarily selected potential.
    * <p>
-   * The potential is determined by which of 6, 20, or the next-higher power of 10
-   * is lowest without being below the value.
+   * The potential is determined by which of 6, 20, or the next-higher
+   * power of 10 is lowest without being below the value.
    */
   public DCNumber(double value) {
     this.value = value;
@@ -28,17 +28,17 @@ public class DCNumber extends DCSingle {
       potential = Math.pow(10, Math.ceil(Math.log10(value)));
     }
   }
-
+  
   @Override
   public String toString(int lvl) {
     return numFormat.format(value);
   }
-
+  
   @Override
   public String toCode() {
     return codeFormat.format(value);
   }
-
+  
   @Override
   public void printTree(int level) {
     printSpaced(level, "Number " + value);

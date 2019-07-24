@@ -2,7 +2,7 @@ package net.nixill;
 
 public class NixMath {
   // http://jonisalonen.com/2012/converting-decimal-numbers-to-ratios/
-  public static int[] float2fracPriv(double x) {
+  private static int[] float2fracPriv(double x) {
     double tolerance = 1.0E-6;
     int h1 = 1;
     int h2 = 0;

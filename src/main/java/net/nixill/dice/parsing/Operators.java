@@ -55,7 +55,7 @@ public class Operators {
     putOperator(MathsOperators.INT_DIVIDE);
     putOperator(MathsOperators.MODULO);
     putOperator(MathsOperators.DUO_DIVIDE);
-
+    
     putOperator(DiceOperators.DICE);
     putOperator(DiceOperators.ONE_DIE);
     putOperator(DiceOperators.ROLL_UNTIL);
@@ -191,12 +191,13 @@ public class Operators {
   public static void putOperator(BinaryOperator<?> oper) {
     binaryOperators.put(oper.getSymbol(), oper);
   }
-
+  
   /**
-   * Add all of a {@link ComparisonOperators}' set to the list of recognized operators.
+   * Add all of a {@link ComparisonOperators}' set to the list of
+   * recognized operators.
    * 
    * @param opers
-   *   The operator set to add 
+   *   The operator set to add
    */
   public static void putOperator(ComparisonOperators<?> opers) {
     putOperator(opers.EQUAL);

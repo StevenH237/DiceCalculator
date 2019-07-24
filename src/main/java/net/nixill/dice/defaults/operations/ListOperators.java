@@ -176,6 +176,8 @@ public class ListOperators {
    * <li><code>left</code> operand - expression list: A list</li>
    * <li><code>right</code> operand - number: The item to select from the
    * list</li>
+   * <li>return - expression: The selected expression.</li>
+   * </ul>
    */
   public static final BinaryOperator<DCValue> SELECT = new BinaryOperator<DCValue>(
       "s", Priorities.LIST, (left, right) -> {

@@ -13,11 +13,11 @@ public class DCOperation extends DCExpression {
   private DCEntity left;
   private DCEntity right;
   private Operator oper;
-
+  
   /**
-   * Creates a new operator expression. The order of entities and operator should
-   * match how it's typed, with the ignored side of a unary operator receiving a
-   * null value. For example:
+   * Creates a new operator expression. The order of entities and operator
+   * should match how it's typed, with the ignored side of a unary operator
+   * receiving a null value. For example:
    * 
    * <pre>
    *typed  left  oper  right
@@ -26,16 +26,19 @@ public class DCOperation extends DCExpression {
    *4!     4     !     null
    * </pre>
    * 
-   * @param left  The left side of the operator (null for prefix operators)
-   * @param oper  The operator itself
-   * @param right The right side of the operator (null for postfix operators)
+   * @param left
+   *   The left side of the operator (null for prefix operators)
+   * @param oper
+   *   The operator itself
+   * @param right
+   *   The right side of the operator (null for postfix operators)
    */
   public DCOperation(DCEntity left, Operator oper, DCEntity right) {
     this.left = left;
     this.oper = oper;
     this.right = right;
   }
-
+  
   @Override
   public DCValue getValue() {
     if (oper instanceof BinaryOperator) {
@@ -48,11 +51,12 @@ public class DCOperation extends DCExpression {
       return null;
     }
   }
-
+  
   @Override
   public String toString(int level) {
     if (oper instanceof BinaryOperator) {
-      return "(" + left.toString(level - 1) + oper.getSymbol() + right.toString(level - 1) + ")";
+      return "(" + left.toString(level - 1) + oper.getSymbol()
+          + right.toString(level - 1) + ")";
     } else if (oper instanceof PrefixOperator) {
       return "(" + oper.getSymbol() + right.toString(level - 1) + ")";
     } else if (oper instanceof PostfixOperator) {
@@ -61,7 +65,7 @@ public class DCOperation extends DCExpression {
       return "";
     }
   }
-
+  
   @Override
   public String toCode() {
     if (oper instanceof BinaryOperator) {
@@ -74,7 +78,7 @@ public class DCOperation extends DCExpression {
       return "";
     }
   }
-
+  
   @Override
   public void printTree(int level) {
     printSpaced(level, "Operator \"" + oper.getSymbol() + "\"");

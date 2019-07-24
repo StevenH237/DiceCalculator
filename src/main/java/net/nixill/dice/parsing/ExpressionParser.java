@@ -16,28 +16,33 @@ import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.parsing.ExpressionPiece.ExpressionPieceType;
 
 /**
- * A class that takes a list of {@link ExpressionPiece}s and builds a tree of
- * {@link DCExpression}s from them.
+ * A class that takes a list of {@link ExpressionPiece}s and builds a tree
+ * of {@link DCExpression}s from them.
  */
 public class ExpressionParser {
   /**
-   * Builds a {@link DCExpression} tree from a list of {@link ExpressionPiece}s
+   * Builds a {@link DCExpression} tree from a list of
+   * {@link ExpressionPiece}s
    * 
-   * @param pieces The list of pieces from which to build
+   * @param pieces
+   *   The list of pieces from which to build
    * @return The root of the DCExpression tree
-   * @throws UserInputException If there are two values not separated by an
-   *                            operator, or unmatched brackets.
+   * @throws UserInputException
+   *   If there are two values not separated by an operator, or unmatched
+   *   brackets.
    */
   public static DCEntity parseLine(ArrayList<ExpressionPiece> pieces) {
     DCEntity ent = parseChain(pieces);
     if (!pieces.isEmpty()) {
       ExpressionPiece piece = pieces.get(0);
-      throw new UserInputException("Unmatched " + piece.contents, piece.position);
+      throw new UserInputException("Unmatched " + piece.contents,
+          piece.position);
     }
     return ent;
   }
-
-  private static DCEntity parseParentheses(ArrayList<ExpressionPiece> pieces) {
+  
+  private static DCEntity parseParentheses(
+      ArrayList<ExpressionPiece> pieces) {
     ExpressionPiece lpar = pieces.remove(0);
     DCEntity ent = parseChain(pieces);
     if (pieces.isEmpty()) {
@@ -45,118 +50,125 @@ public class ExpressionParser {
     } else {
       ExpressionPiece rpar = pieces.remove(0);
       if (!rpar.contents.equals(")")) {
-        throw new UserInputException("Unmatched ( and " + rpar.contents, lpar.position);
+        throw new UserInputException("Unmatched ( and " + rpar.contents,
+            lpar.position);
       }
     }
-
+    
     return ent;
   }
-
-  private static DCListExpression parseList(ArrayList<ExpressionPiece> pieces) {
+  
+  private static DCListExpression parseList(
+      ArrayList<ExpressionPiece> pieces) {
     ExpressionPiece lbracket = pieces.remove(0);
     ArrayList<DCEntity> listItems = new ArrayList<>();
-
+    
     // Allow empty lists
     ExpressionPiece next = pieces.get(0);
     if (next.contents.equals("]")) {
       pieces.remove(0);
       return new DCListExpression(listItems);
     }
-
+    
     // Add items to non-empty lists
     while (!pieces.isEmpty()) {
       // First get the value
       DCEntity ent = parseChain(pieces);
       if (ent == null) {
-        throw new UserInputException("List with empty value", pieces.get(0).position);
+        throw new UserInputException("List with empty value",
+            pieces.get(0).position);
       }
-
+      
       // Add it to the list of values
       listItems.add(ent);
-
+      
       // Make sure we're not already at the end of the line
       if (pieces.isEmpty()) {
         throw new UserInputException("Unmatched [", lbracket.position);
       }
-
+      
       // Then get the next "bracket"
       next = pieces.remove(0);
-
+      
       // If it's the wrong kind of closing bracket, error.
       if (next.contents.equals(")") || next.contents.equals("}")) {
-        throw new UserInputException("Unmatched [ and " + next.contents, lbracket.position);
+        throw new UserInputException("Unmatched [ and " + next.contents,
+            lbracket.position);
       }
-
+      
       // If it's a list closer, close the list.
       if (next.contents.equals("]")) {
         return new DCListExpression(listItems);
       }
     }
-
+    
     throw new UserInputException("Unmatched [", lbracket.position);
   }
-
-  private static DCFunction parseFunction(ArrayList<ExpressionPiece> pieces) {
+  
+  private static DCFunction parseFunction(
+      ArrayList<ExpressionPiece> pieces) {
     ExpressionPiece lbracket = pieces.remove(0);
     String name = lbracket.contents.substring(1).toLowerCase();
     ArrayList<DCEntity> params = new ArrayList<>();
-
+    
     // Allow no-param functions
     ExpressionPiece next = pieces.get(0);
     if (next.contents.equals("}")) {
       pieces.remove(0);
       return new DCFunction(name, params);
     }
-
+    
     if (next.contents.equals(",")) {
       pieces.remove(0);
     }
-
+    
     // Add items to with-param functions
     while (!pieces.isEmpty()) {
       // First get the value
       DCEntity ent = parseChain(pieces);
       if (ent == null) {
-        throw new UserInputException("Function with empty param", pieces.get(0).position);
+        throw new UserInputException("Function with empty param",
+            pieces.get(0).position);
       }
-
+      
       // Add it to the list of params
       params.add(ent);
-
+      
       // Make sure we're not already at the end of the line
       if (pieces.isEmpty()) {
         throw new UserInputException("Unmatched {", lbracket.position);
       }
-
+      
       // Then get the next "bracket"
       next = pieces.remove(0);
-
+      
       // If it's the wrong kind of closing bracket, error.
       if (next.contents.equals(")") || next.contents.equals("]")) {
-        throw new UserInputException("Unmatched { and " + next.contents, lbracket.position);
+        throw new UserInputException("Unmatched { and " + next.contents,
+            lbracket.position);
       }
-
+      
       // If it's a function closer, close the function.
       if (next.contents.equals("}")) {
         return new DCFunction(name, params);
       }
     }
-
+    
     throw new UserInputException("Unmatched {", lbracket.position);
   }
-
+  
   private static DCEntity parseChain(ArrayList<ExpressionPiece> pieces) {
     if (pieces.isEmpty()) {
       throw new UserInputException("Empty list received.", 0);
     }
-
+    
     ArrayDeque<ExpressionBuilder> exps = new ArrayDeque<>();
     DCEntity hold = null;
     boolean valueLast = false;
-
+    
     while (!pieces.isEmpty()) {
       ExpressionPiece piece = pieces.get(0);
-
+      
       // Get the next value, if there is one
       DCEntity ent = null;
       boolean err = false;
@@ -191,25 +203,28 @@ public class ExpressionParser {
         }
       } else if (piece.type == ExpressionPieceType.STRING) {
         if (!valueLast) {
-          String check = piece.contents.substring(1, piece.contents.length() - 1);
-
-          check = check.replace("\\\\", "\uF000").replace("\\", "").replace("\uF000", "\\");
-
+          String check = piece.contents.substring(1,
+              piece.contents.length() - 1);
+          
+          check = check.replace("\\\\", "\uF000").replace("\\", "")
+              .replace("\uF000", "\\");
+          
           ent = new DCString(check);
           pieces.remove(0);
         } else {
           err = true;
         }
       }
-
+      
       if (err) {
-        throw new UserInputException("Two consecutive values", piece.position);
+        throw new UserInputException("Two consecutive values",
+            piece.position);
       }
-
+      
       // If there is a value, put it in the most recent expression
       if (ent != null) {
         valueLast = true;
-
+        
         if (exps.isEmpty()) {
           // If there's no expression, just hold the value
           hold = ent;
@@ -218,17 +233,18 @@ public class ExpressionParser {
           if (exp.getRightEnt() == null && exp.getRightExp() == null) {
             exp.setRight(ent);
           } else {
-            throw new UserInputException("Two consecutive values.", piece.position);
+            throw new UserInputException("Two consecutive values.",
+                piece.position);
           }
         }
         continue;
       }
-
+      
       // If there's no value, the piece must be an operator
       ExpressionBuilder expNew = null;
       Operator op = null;
       valueLast = false;
-
+      
       if (piece.type == ExpressionPieceType.BINARY_OPERATOR) {
         op = Operators.getBinaryOperator(piece.contents);
       } else if (piece.type == ExpressionPieceType.POSTFIX_OPERATOR) {
@@ -236,9 +252,9 @@ public class ExpressionParser {
       } else if (piece.type == ExpressionPieceType.PREFIX_OPERATOR) {
         op = Operators.getPrefixOperator(piece.contents);
       }
-
+      
       expNew = new ExpressionBuilder(op);
-
+      
       // If it's the first operator, then just use the held value
       if (exps.isEmpty()) {
         if (hold != null) {
@@ -259,7 +275,8 @@ public class ExpressionParser {
           while (!exps.isEmpty()) {
             expNext = exps.getLast();
             if (expNext.getOper().getPriority() > op.getPriority()
-                || (expNext.getOper().getPriority() == op.getPriority() && !Operator.isFromRight(op.getPriority()))
+                || (expNext.getOper().getPriority() == op.getPriority()
+                    && !Operator.isFromRight(op.getPriority()))
                 || expNext.getOper() instanceof PostfixOperator) {
               expOld = exps.removeLast();
               expNext = null;
@@ -267,7 +284,7 @@ public class ExpressionParser {
               break;
             }
           }
-
+          
           // The last removed expression becomes the left of this one
           // (if no such expression, then the right of the first
           // expression)
@@ -277,23 +294,23 @@ public class ExpressionParser {
           } else {
             expNew.setLeft(expOld);
           }
-
+          
           if (expNext != null) {
             expNext.setRight(expNew);
           }
-
+          
           exps.addLast(expNew);
         }
       }
-
+      
       pieces.remove(0);
     }
-
+    
     if (exps.isEmpty()) {
       return hold;
     } else {
       return exps.getFirst().build();
     }
   }
-
+  
 }

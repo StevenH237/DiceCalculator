@@ -9,30 +9,35 @@ package net.nixill.dice.exception;
  */
 public class DiceCalcException extends RuntimeException {
   private static final long serialVersionUID = 7206711603686419099L;
-
+  
   /**
    * Create a new DiceCalcException with an underlying cause.
    * 
-   * @param t The cause.
+   * @param t
+   *   The cause.
    */
   public DiceCalcException(Throwable t) {
     super(t);
   }
-
+  
   /**
    * Create a new DiceCalcException with an underlying message.
    * 
-   * @param msg The message.
+   * @param msg
+   *   The message.
    */
   public DiceCalcException(String msg) {
     super(msg);
   }
-
+  
   /**
-   * Create a new DiceCalcException with an underlying message <i>and</i> cause.
+   * Create a new DiceCalcException with an underlying message <i>and</i>
+   * cause.
    * 
-   * @param msg The message.
-   * @param t   The cause.
+   * @param msg
+   *   The message.
+   * @param t
+   *   The cause.
    */
   public DiceCalcException(String msg, Throwable t) {
     super(msg, t);
