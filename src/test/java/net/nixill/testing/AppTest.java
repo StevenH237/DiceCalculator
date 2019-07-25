@@ -34,41 +34,49 @@ public class AppTest {
     System.out.println("-- BEGIN NEW TEST --");
     Functions.setLoader(new Loader());
     
-    // v0.1 tests
-    testLine("3");
-    testLine("4+2");
-    testLine("3/-2");
-    testLine("4!/3");
-    testLine("2*(-1+5)");
-    testLine("2^5");
-    testLine("2+[1,2,3]");
-    testLine("[1,(1+1),(1-1)]");
-    testLine("{level}");
-    testLine("{level,5}");
-    testLine("{_last}+3");
-    testLine("{level,10}");
-    testLine("{_ans}+2");
+    String version = "v0.4";
+    boolean all_tests = false;
     
-    // v0.3 tests
-    testLine("\"Hello!\"");
-    testLine("[1, 2, 3]?");
-    testLine("$[1, 2, 3]");
-    testLine("#[1, 2, 3]");
-    testLine("\"Hello\" + [32] + \"World\"");
-    testLine("\"Hello\" + 32 + \"World\"");
-    testLine("[\"red\", \"green\", \"blue\"]?s1");
-    testLine("1 + 2");
-    testLine("1 + [3]");
-    testLine("1 + \"4\"");
-    testLine("[2] + [5]");
-    testLine("[50] + \"6\"");
+    if (all_tests || version.equals("v0.1")) {
+      testLine("3");
+      testLine("4+2");
+      testLine("3/-2");
+      testLine("4!/3");
+      testLine("2*(-1+5)");
+      testLine("2^5");
+      testLine("2+[1,2,3]");
+      testLine("[1,(1+1),(1-1)]");
+      testLine("{level}");
+      testLine("{level,5}");
+      testLine("{_last}+3");
+      testLine("{level,10}");
+      testLine("{_ans}+2");
+    }
     
-    // v0.4 tests
-    testLine("2d5");
-    testLine("d20");
-    testLine("d1");
-    testLine("6u>=5");
-    testLine("6u<=5+{_u}");
+    if (all_tests || version.equals("v0.3")) {
+      // v0.3 tests
+      testLine("\"Hello!\"");
+      testLine("[1, 2, 3]?");
+      testLine("$[1, 2, 3]");
+      testLine("#[1, 2, 3]");
+      testLine("\"Hello\" + [32] + \"World\"");
+      testLine("\"Hello\" + 32 + \"World\"");
+      testLine("[\"red\", \"green\", \"blue\"]?s1");
+      testLine("1 + 2");
+      testLine("1 + [3]");
+      testLine("1 + \"4\"");
+      testLine("[2] + [5]");
+      testLine("[50] + \"6\"");
+    }
+    
+    if (all_tests || version.equals("v0.4")) {
+      // v0.4 tests
+      testLine("2d5");
+      testLine("d20");
+      testLine("d1");
+      testLine("6u>=5");
+      testLine("6u<=5+{_u}");
+    }
   }
   
   public void printExpList(ArrayList<ExpressionPiece> list) {
