@@ -98,7 +98,7 @@ public class ComparisonOperators<T extends DCValue> {
     /**
      * The equal-to comparison (<code>left == right</code>).
      */
-    EQUAL("=", (left, right) -> (left == right)),
+    EQUAL("=", (left, right) -> (left.equals(right))),
     /**
      * The less-than comparison (<code>left &lt; right</code>).
      */
@@ -112,7 +112,7 @@ public class ComparisonOperators<T extends DCValue> {
      * The not-equal-to (or less-than-or-greater-than) comparison
      * (<code>left != right</code>).
      */
-    NOT_EQUAL("!=", (left, right) -> (left != right)),
+    NOT_EQUAL("!=", (left, right) -> (!left.equals(right))),
     /**
      * The greater-than-or-equal-to (or not-less-than) comparison
      * (<code>left &gt;= right</code>).
