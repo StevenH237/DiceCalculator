@@ -39,6 +39,33 @@ public class DCOperation extends DCExpression {
     this.right = right;
   }
   
+  /**
+   * Returns the left operand of the operator expression.
+   * 
+   * @return The left operand
+   */
+  public DCEntity getLeft() {
+    return left;
+  }
+  
+  /**
+   * Returns the right operand of the operator expression.
+   * 
+   * @return The right operand
+   */
+  public DCEntity getRight() {
+    return right;
+  }
+  
+  /**
+   * Returns the operator of the expression.
+   * 
+   * @return The operator
+   */
+  public Operator getOperator() {
+    return oper;
+  }
+  
   @Override
   public DCValue getValue() {
     if (oper instanceof BinaryOperator) {
