@@ -220,7 +220,7 @@ public class Functions {
    *   The name of the variable to retrieve.
    * @return The value of the named variable.
    */
-  public String getThread(String name) {
+  public static String getThread(String name) {
     return env.get().get(name);
   }
   
@@ -233,7 +233,7 @@ public class Functions {
    *   The value to set.
    * @return The previous value, or <code>null</code> if none.
    */
-  public String setThread(String name, String value) {
+  public static String setThread(String name, String value) {
     return env.get().put(name, value);
   }
 }
