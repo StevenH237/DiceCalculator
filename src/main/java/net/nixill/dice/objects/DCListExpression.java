@@ -39,6 +39,15 @@ public class DCListExpression extends DCExpression {
     return listItems.get(i);
   }
   
+  /**
+   * Gets a copy of the whole list.
+   * 
+   * @return A copy of the list items.
+   */
+  public List<DCEntity> getItems() {
+    return new ArrayList<>(listItems);
+  }
+  
   @Override
   public DCList getValue() {
     ArrayList<DCValue> vals = new ArrayList<>();
