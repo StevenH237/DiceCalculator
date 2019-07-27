@@ -93,6 +93,15 @@ public class DCFunction extends DCExpression {
     return Collections.unmodifiableList(params);
   }
   
+  /**
+   * Returns the name of the function.
+   * 
+   * @return The name of the function.
+   */
+  public String getName() {
+    return name;
+  }
+  
   @Override
   public String toString(int lvl) {
     String out = "{" + name;
