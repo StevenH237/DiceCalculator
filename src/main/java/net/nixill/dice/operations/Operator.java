@@ -54,6 +54,7 @@ public abstract class Operator {
   // -- NOT STATICS --//
   protected int    priority;
   protected String symbol;
+  protected int    level;
   
   /**
    * Creates a new Operator.
@@ -63,10 +64,14 @@ public abstract class Operator {
    * @param priority
    *   The priority the operator has, compared to other operations with
    *   which it is in line.
+   * @param level
+   *   The level that must be used for the expression to show up in
+   *   history.
    */
-  public Operator(String symbol, int priority) {
+  public Operator(String symbol, int priority, int level) {
     this.priority = priority;
     this.symbol = symbol;
+    this.level = level;
   }
   
   /**
@@ -88,6 +93,15 @@ public abstract class Operator {
    */
   public String getSymbol() {
     return symbol;
+  }
+  
+  /**
+   * Returns the level used by the operator.
+   * 
+   * @return The level
+   */
+  public int getLevel() {
+    return level;
   }
   
   public abstract String toString();

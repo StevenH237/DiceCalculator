@@ -12,6 +12,7 @@ public class ComparisonOperators<T extends DCValue> {
   private ComparisonFunction<T> coFunc;
   private String                supersymbol;
   private int                   coPriority;
+  private int                   coLevel;
   
   /**
    * This ComparisonOperator made with a greater than sign.
@@ -56,11 +57,12 @@ public class ComparisonOperators<T extends DCValue> {
    * @param func
    *   The function to perform.
    */
-  public ComparisonOperators(String symbol, int priority,
+  public ComparisonOperators(String symbol, int priority, int level,
       ComparisonFunction<T> func) {
     this.supersymbol = symbol;
     this.coPriority = priority;
     this.coFunc = func;
+    this.coLevel = level;
     
     GREATER = new ComparisonOperator(Comparison.GREATER);
     EQUAL = new ComparisonOperator(Comparison.EQUAL);
@@ -167,7 +169,7 @@ public class ComparisonOperators<T extends DCValue> {
      *   The comparison to use.
      */
     public ComparisonOperator(Comparison comp) {
-      super(supersymbol + comp.subsymbol, coPriority,
+      super(supersymbol + comp.subsymbol, coPriority, coLevel,
           new BiFunction<DCEntity, DCEntity, T>() {
             @Override
             public T apply(DCEntity left, DCEntity right) {

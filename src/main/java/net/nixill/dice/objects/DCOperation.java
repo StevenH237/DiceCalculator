@@ -1,6 +1,8 @@
 package net.nixill.dice.objects;
 
 import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.FunctionHistory;
+import net.nixill.dice.operations.FunctionHistory.HistoryEntry;
 import net.nixill.dice.operations.Operator;
 import net.nixill.dice.operations.PostfixOperator;
 import net.nixill.dice.operations.PrefixOperator;
@@ -68,15 +70,20 @@ public class DCOperation extends DCExpression {
   
   @Override
   public DCValue getValue() {
+    DCValue val = null;
+    
     if (oper instanceof BinaryOperator) {
-      return ((BinaryOperator<?>) oper).run(left, right);
+      val = ((BinaryOperator<?>) oper).run(left, right);
     } else if (oper instanceof PrefixOperator) {
-      return ((PrefixOperator<?>) oper).run(right);
+      val = ((PrefixOperator<?>) oper).run(right);
     } else if (oper instanceof PostfixOperator) {
-      return ((PostfixOperator<?>) oper).run(left);
-    } else {
-      return null;
+      val = ((PostfixOperator<?>) oper).run(left);
     }
+    
+    FunctionHistory.add(new HistoryEntry(oper.getLevel(),
+        toCode() + " => " + val.toCode()));
+    
+    return val;
   }
   
   @Override

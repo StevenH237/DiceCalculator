@@ -21,9 +21,9 @@ public class BinaryOperator<R extends DCValue> extends Operator {
    * @param func
    *   The function of the operator.
    */
-  public BinaryOperator(String symbol, int priority,
+  public BinaryOperator(String symbol, int priority, int level,
       BiFunction<DCEntity, DCEntity, R> func) {
-    super(symbol, priority);
+    super(symbol, priority, level);
     this.func = func;
   }
   

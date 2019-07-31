@@ -26,7 +26,7 @@ public class DiceOperators {
    * </ul>
    */
   public static final BinaryOperator<DCList> DICE = new BinaryOperator<>(
-      "d", Priorities.DICE, (left, right) -> {
+      "d", Priorities.DICE, 1, (left, right) -> {
         double count = Math.floor(left.getValue().getSingle().getAmount());
         double sides = Math
             .floor(right.getValue().getSingle().getAmount());
@@ -57,7 +57,7 @@ public class DiceOperators {
    * </ul>
    */
   public static final PrefixOperator<DCDie> ONE_DIE = new PrefixOperator<>(
-      "d", Priorities.DICE, (ent) -> {
+      "d", Priorities.DICE, 1, (ent) -> {
         double sides = Math.floor(ent.getValue().getSingle().getAmount());
         
         if (sides < 1) {
@@ -82,7 +82,7 @@ public class DiceOperators {
    * </ul>
    */
   public static final ComparisonOperators<DCList> ROLL_UNTIL = new ComparisonOperators<>(
-      "u", Priorities.DICE, (left, comp, right) -> {
+      "u", Priorities.DICE, 1, (left, comp, right) -> {
         double sides = Math.floor(left.getValue().getSingle().getAmount());
         double cutoff = right.getValue().getSingle().getAmount();
         

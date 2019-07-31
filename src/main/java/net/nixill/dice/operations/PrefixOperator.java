@@ -20,9 +20,9 @@ public class PrefixOperator<R extends DCValue> extends UnaryOperator<R> {
    * @param func
    *   The function the operator uses.
    */
-  public PrefixOperator(String symbol, int priority,
+  public PrefixOperator(String symbol, int priority, int level,
       Function<DCEntity, R> func) {
-    super(symbol, priority, false, func);
+    super(symbol, priority, false, level, func);
   }
   
   public String toString() {

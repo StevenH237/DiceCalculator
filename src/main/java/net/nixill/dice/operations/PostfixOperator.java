@@ -20,9 +20,9 @@ public class PostfixOperator<R extends DCValue> extends UnaryOperator<R> {
    * @param func
    *   The function the operator uses.
    */
-  public PostfixOperator(String symbol, int priority,
+  public PostfixOperator(String symbol, int priority, int level,
       Function<DCEntity, R> func) {
-    super(symbol, priority, true, func);
+    super(symbol, priority, true, level, func);
   }
   
   public String toString() {

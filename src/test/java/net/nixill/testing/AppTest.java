@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCValue;
+import net.nixill.dice.operations.FunctionHistory;
 import net.nixill.dice.operations.Functions;
+import net.nixill.dice.operations.FunctionHistory.HistoryEntry;
 import net.nixill.dice.parsing.ExpressionPiece;
 import net.nixill.dice.parsing.ExpressionSplitter;
 
@@ -34,8 +36,8 @@ public class AppTest {
     System.out.println("-- BEGIN NEW TEST --");
     Functions.setLoader(new Loader());
     
-    String version = "v0.4";
-    boolean all_tests = false;
+    String version = "v0.5";
+    boolean all_tests = true;
     
     if (all_tests || version.equals("v0.1")) {
       testLine("3");
@@ -76,6 +78,13 @@ public class AppTest {
       testLine("d1");
       testLine("6u>=5");
       testLine("6u<=5+{_u}");
+    }
+    
+    ArrayList<HistoryEntry> hist = FunctionHistory.getList();
+    for (HistoryEntry entry : hist) {
+      System.out.println("Entry at level " + entry.level + ":");
+      System.out.println(entry.text);
+      System.out.println("\u200b");
     }
   }
   

@@ -23,7 +23,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCNumber> TIMES = new BinaryOperator<>(
-      "*", Priorities.TIMES, (left, right) -> {
+      "*", Priorities.TIMES, 2, (left, right) -> {
         return new DCNumber(left.getValue().getSingle().getAmount()
             * right.getValue().getSingle().getAmount());
       });
@@ -39,7 +39,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCNumber> DIVIDE = new BinaryOperator<>(
-      "/", Priorities.TIMES, (left, right) -> {
+      "/", Priorities.TIMES, 2, (left, right) -> {
         return new DCNumber(left.getValue().getSingle().getAmount()
             / right.getValue().getSingle().getAmount());
       });
@@ -57,7 +57,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCNumber> POWER = new BinaryOperator<>(
-      "^", Priorities.POWER, (left, right) -> {
+      "^", Priorities.POWER, 2, (left, right) -> {
         return new DCNumber(
             Math.pow(left.getValue().getSingle().getAmount(),
                 right.getValue().getSingle().getAmount()));
@@ -72,7 +72,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final PostfixOperator<DCNumber> FACTORIAL = new PostfixOperator<>(
-      "!", Priorities.FACTORIAL, (num) -> {
+      "!", Priorities.FACTORIAL, 2, (num) -> {
         return new DCNumber(
             factorial(num.getValue().getSingle().getAmount()));
       });
@@ -102,7 +102,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCNumber> INT_DIVIDE = new BinaryOperator<>(
-      "//", Priorities.TIMES, (left, right) -> {
+      "//", Priorities.TIMES, 2, (left, right) -> {
         return new DCNumber(
             Math.floor(left.getValue().getSingle().getAmount()
                 / right.getValue().getSingle().getAmount()));
@@ -119,7 +119,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCNumber> MODULO = new BinaryOperator<>(
-      "%", Priorities.TIMES, (left, right) -> {
+      "%", Priorities.TIMES, 2, (left, right) -> {
         return new DCNumber(left.getValue().getSingle().getAmount()
             % right.getValue().getSingle().getAmount());
       });
@@ -136,7 +136,7 @@ public class MathsOperators {
    * </ul>
    */
   public static final BinaryOperator<DCList> DUO_DIVIDE = new BinaryOperator<>(
-      "/%", Priorities.TIMES, (left, right) -> {
+      "/%", Priorities.TIMES, 2, (left, right) -> {
         double lAmt = left.getValue().getSingle().getAmount();
         double rAmt = right.getValue().getSingle().getAmount();
         

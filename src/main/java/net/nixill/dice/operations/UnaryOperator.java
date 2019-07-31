@@ -23,8 +23,8 @@ public abstract class UnaryOperator<R extends DCValue> extends Operator {
    *   The function of the operator.
    */
   protected UnaryOperator(String symbol, int priority, boolean post,
-      Function<DCEntity, R> func) {
-    super(symbol, priority);
+      int level, Function<DCEntity, R> func) {
+    super(symbol, priority, level);
     this.func = func;
     this.isPostfix = post;
   }

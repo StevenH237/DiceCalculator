@@ -6,7 +6,9 @@ import java.util.List;
 
 import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.exception.NoSuchFunctionException;
+import net.nixill.dice.operations.FunctionHistory;
 import net.nixill.dice.operations.Functions;
+import net.nixill.dice.operations.FunctionHistory.HistoryEntry;
 
 /**
  * A named function, with or without parameters.
@@ -46,6 +48,9 @@ public class DCFunction extends DCExpression {
   @Override
   public DCValue getValue() {
     DCEntity ent = getSaved();
+    
+    FunctionHistory
+        .add(new HistoryEntry(1, "{" + name + "} => " + ent.toCode()));
     
     if (ent instanceof DCExpression) {
       Functions.stackParams(params);

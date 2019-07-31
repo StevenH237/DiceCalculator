@@ -32,7 +32,7 @@ public class ListOperators {
    * </ul>
    */
   public static final BinaryOperator<DCValue> JOIN = new BinaryOperator<>(
-      "+", Priorities.JOIN, ListOperators::joinOp);
+      "+", Priorities.JOIN, 2, ListOperators::joinOp);
   
   public static DCValue joinOp(DCEntity leftEnt, DCEntity rightEnt) {
     DCValue left = leftEnt.getValue();
@@ -61,7 +61,7 @@ public class ListOperators {
    * </ul>
    */
   public static final PrefixOperator<DCValue> NEGATIVE = new PrefixOperator<>(
-      "-", Priorities.NEGATIVE, ListOperators::negativeOp);
+      "-", Priorities.NEGATIVE, 2, ListOperators::negativeOp);
   
   public static DCValue negativeOp(DCEntity ent) {
     DCValue val = ent.getValue();
@@ -101,7 +101,7 @@ public class ListOperators {
    * </ul>
    */
   public static final BinaryOperator<DCValue> NEG_JOIN = new BinaryOperator<>(
-      "-", Priorities.JOIN, (left, right) -> {
+      "-", Priorities.JOIN, 2, (left, right) -> {
         return joinOp(left, negativeOp(right));
       });
   
@@ -115,7 +115,7 @@ public class ListOperators {
    * </ul>
    */
   public static final PrefixOperator<DCNumber> SIZE = new PrefixOperator<>(
-      "#", Priorities.LIST, (ent) -> {
+      "#", Priorities.LIST, 2, (ent) -> {
         DCValue val = ent.getValue();
         if (val instanceof DCSingle) {
           return new DCNumber(1);
@@ -132,7 +132,7 @@ public class ListOperators {
    * </ul>
    */
   public static final PrefixOperator<DCSingle> SUM = new PrefixOperator<>(
-      "$", Priorities.LIST, (ent) -> {
+      "$", Priorities.LIST, 2, (ent) -> {
         return ent.getValue().getSingle();
       });
   
@@ -144,7 +144,7 @@ public class ListOperators {
    * </ul>
    */
   public static final PostfixOperator<DCList> SHUFFLE = new PostfixOperator<>(
-      "?", Priorities.LIST, (ent) -> {
+      "?", Priorities.LIST, 2, (ent) -> {
         DCList list = ent.getValue().getList();
         
         if (list.size() < 2) {
@@ -180,7 +180,7 @@ public class ListOperators {
    * </ul>
    */
   public static final BinaryOperator<DCValue> SELECT = new BinaryOperator<DCValue>(
-      "s", Priorities.LIST, (left, right) -> {
+      "s", Priorities.LIST, 2, (left, right) -> {
         DCValue val = right.getValue();
         int selection = 0;
         
