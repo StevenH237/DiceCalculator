@@ -49,8 +49,10 @@ public class DCFunction extends DCExpression {
   public DCValue getValue() {
     DCEntity ent = getSaved();
     
-    FunctionHistory
-        .add(new HistoryEntry(1, "{" + name + "} => " + ent.toCode()));
+    if (!(ent instanceof DCCodeFunction)) {
+      FunctionHistory
+          .add(new HistoryEntry(1, "{" + name + "} => " + ent.toCode()));
+    }
     
     if (ent instanceof DCExpression) {
       Functions.stackParams(params);

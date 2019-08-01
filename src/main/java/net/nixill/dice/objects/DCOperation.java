@@ -80,8 +80,13 @@ public class DCOperation extends DCExpression {
       val = ((PostfixOperator<?>) oper).run(left);
     }
     
-    FunctionHistory.add(new HistoryEntry(oper.getLevel(),
-        toCode() + " => " + val.toCode()));
+    String code = toCode();
+    String out = val.toCode();
+    
+    if (!code.equals(out)) {
+      FunctionHistory.add(new HistoryEntry(oper.getLevel(),
+          toCode() + " => " + val.toString()));
+    }
     
     return val;
   }
