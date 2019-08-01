@@ -49,9 +49,9 @@ public class DCFunction extends DCExpression {
   public DCValue getValue() {
     DCEntity ent = getSaved();
     
-    if (!(ent instanceof DCCodeFunction)) {
+    if (!(ent instanceof DCCodeFunction) && !name.matches("\\d+")) {
       FunctionHistory
-          .add(new HistoryEntry(1, "{" + name + "} => " + ent.toCode()));
+          .add(new HistoryEntry(1, "{" + name + "} => " + ent.toString()));
     }
     
     if (ent instanceof DCExpression) {

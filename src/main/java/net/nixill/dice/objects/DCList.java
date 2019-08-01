@@ -79,13 +79,38 @@ public class DCList extends DCValue {
     return listItems.get(i);
   }
   
+  /**
+   * Returns whether or not there's a string anywhere in the list.
+   * 
+   * @return <code>true</code> iff any sub-item is a string.
+   */
+  public boolean containsString() {
+    for (DCValue val : listItems) {
+      if (val instanceof DCString) {
+        return true;
+      } else if (val instanceof DCList) {
+        if (((DCList) val).containsString()) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  }
+  
   @Override
   public String toString(int lvl) {
     if (listItems.isEmpty()) {
-      return "0 []";
+      return "[]";
     }
     
-    String out = numFormat.format(getSingle().getAmount()) + " [";
+    String out = "";
+    if (containsString()) {
+      out = "[";
+    } else {
+      out = numFormat.format(getSingle().getAmount()) + " [";
+    }
+    
     for (DCValue val : listItems) {
       out += val.toString(lvl - 1) + ", ";
     }
