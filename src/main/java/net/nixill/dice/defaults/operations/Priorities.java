@@ -24,6 +24,11 @@ public final class Priorities {
   public static final int DICE = JOIN + 50;
   
   /**
+   * The priority of "p", which is 45. This level is right-associative.
+   */
+  public static final int PICK = DICE - 5;
+  
+  /**
    * The priority of prefix "#" and "$", which is -5.
    */
   public static final int LIST = JOIN - 5;
@@ -52,5 +57,6 @@ public final class Priorities {
   
   static {
     Operator.setFromRight(POWER);
+    Operator.setFromRight(PICK);
   }
 }

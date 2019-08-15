@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import net.nixill.NixMath;
 import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.objects.DCDie;
+import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCList;
+import net.nixill.dice.objects.DCListExpression;
+import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCValue;
 import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.ComparisonOperators.Comparison;
-import net.nixill.dice.operations.PrefixOperator;
 import net.nixill.dice.operations.Functions;
+import net.nixill.dice.operations.PrefixOperator;
 
 /**
  * Implementation of the default operators for rolling dice.
@@ -175,4 +178,41 @@ public class DiceOperators {
         
         return new DCList(out);
       });
+  
+  public static final BinaryOperator<DCList> PICK = new BinaryOperator<>(
+      "p", Priorities.PICK, 1, (left, right) -> {
+        return PICK_FUNC(left, right, false);
+      });
+  
+  public static final BinaryOperator<DCList> PICK_REPLACE = new BinaryOperator<>(
+      "pr", Priorities.PICK, 1, (left, right) -> {
+        return PICK_FUNC(left, right, true);
+      });
+  
+  public static final PrefixOperator<DCValue> PICK_ONE = new PrefixOperator<>(
+      "p", Priorities.PICK, 1, (left) -> {
+        return PICK_FUNC(left, new DCNumber(1), true);
+      });
+  
+  public static DCList PICK_FUNC(DCEntity left, DCEntity right,
+      boolean replace) {
+    
+    ArrayList<DCEntity> ents = new ArrayList<>();
+    int count = (int) left.getValue().getSingle().getAmount();
+    
+    if (right instanceof DCListExpression) {
+      ents.addAll(((DCListExpression) right).getItems());
+    } else {
+      ents.addAll(right.getValue().getList().getItems());
+    }
+    
+    ArrayList<Integer> picks = new ArrayList<>();
+    ArrayList<DCValue> out = new ArrayList<>();
+    
+    for (int i = 0; i < ents.size(); i++) {
+      picks.add(i);
+    }
+    
+    return null;
+  }
 }
