@@ -59,6 +59,9 @@ public class Operators {
     putOperator(DiceOperators.DICE);
     putOperator(DiceOperators.ONE_DIE);
     putOperator(DiceOperators.ROLL_UNTIL);
+    putOperator(DiceOperators.PICK);
+    putOperator(DiceOperators.PICK_ONE);
+    putOperator(DiceOperators.PICK_REPLACE);
     
     initRegexes();
   }

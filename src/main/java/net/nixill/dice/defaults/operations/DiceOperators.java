@@ -1,15 +1,17 @@
 package net.nixill.dice.defaults.operations;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 import net.nixill.NixMath;
 import net.nixill.dice.exception.DiceCalcException;
 import net.nixill.dice.objects.DCDie;
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCList;
-import net.nixill.dice.objects.DCListExpression;
 import net.nixill.dice.objects.DCNumber;
 import net.nixill.dice.objects.DCValue;
+import net.nixill.dice.objects.Randomizer;
 import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.ComparisonOperators.Comparison;
@@ -191,28 +193,43 @@ public class DiceOperators {
   
   public static final PrefixOperator<DCValue> PICK_ONE = new PrefixOperator<>(
       "p", Priorities.PICK, 1, (left) -> {
-        return PICK_FUNC(left, new DCNumber(1), true);
+        return PICK_FUNC(left, new DCNumber(1), true).get(0);
       });
   
   public static DCList PICK_FUNC(DCEntity left, DCEntity right,
       boolean replace) {
     
-    ArrayList<DCEntity> ents = new ArrayList<>();
-    int count = (int) left.getValue().getSingle().getAmount();
+    ArrayList<DCValue> vals = right.getValue().getList().getItems();
+    int count = (int) (left.getValue().getSingle().getAmount());
     
-    if (right instanceof DCListExpression) {
-      ents.addAll(((DCListExpression) right).getItems());
-    } else {
-      ents.addAll(right.getValue().getList().getItems());
-    }
+    Random rand = Randomizer.get();
     
-    ArrayList<Integer> picks = new ArrayList<>();
     ArrayList<DCValue> out = new ArrayList<>();
     
-    for (int i = 0; i < ents.size(); i++) {
-      picks.add(i);
+    if (replace) {
+      while (out.size() < count) {
+        DCValue picked = vals.get(rand.nextInt(vals.size()));
+        out.add(picked);
+      }
+    } else {
+      while (out.size() < count) {
+        if (out.size() + vals.size() <= count) {
+          Collections.shuffle(vals, rand);
+          out.addAll(vals);
+          
+          if (out.size() == count) {
+            vals.clear();
+          }
+        } else {
+          for (int i = out.size(); i < count; i++) {
+            out.add(vals.remove(rand.nextInt(vals.size())));
+          }
+        }
+      }
+      
+      Functions.save2("_p", new DCList(vals));
     }
     
-    return null;
+    return new DCList(out);
   }
 }

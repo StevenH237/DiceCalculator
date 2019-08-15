@@ -36,8 +36,8 @@ public class AppTest {
     System.out.println("-- BEGIN NEW TEST --");
     Functions.setLoader(new Loader());
     
-    String version = "v0.5";
-    boolean all_tests = true;
+    String version = "v0.6";
+    boolean all_tests = false;
     
     if (all_tests || version.equals("v0.1")) {
       testLine("3");
@@ -78,6 +78,15 @@ public class AppTest {
       testLine("d1");
       testLine("6u>=5");
       testLine("6u<=5+{_u}");
+    }
+    
+    if (all_tests || version.equals("v0.6")) {
+      // v0.6 tests
+      testLine("p[1,2,3]");
+      testLine("2p[1,2,3]");
+      testLine("4p[1,2,3]");
+      testLine("2pr[1,2,3]");
+      testLine("6pr[1,2,3]");
     }
     
     ArrayList<HistoryEntry> hist = FunctionHistory.getList();
