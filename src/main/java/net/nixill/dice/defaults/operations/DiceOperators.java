@@ -1,5 +1,6 @@
 package net.nixill.dice.defaults.operations;
 
+import java.rmi.server.Operation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -16,6 +17,7 @@ import net.nixill.dice.operations.BinaryOperator;
 import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.ComparisonOperators.Comparison;
 import net.nixill.dice.operations.Functions;
+import net.nixill.dice.operations.OperationLimits;
 import net.nixill.dice.operations.PrefixOperator;
 
 /**
@@ -39,6 +41,9 @@ public class DiceOperators {
         if (count < 1) {
           throw new DiceCalcException(new IllegalArgumentException(
               "You must roll at least one die."));
+        } else if (count > OperationLimits.getLimit()) {
+          throw new DiceCalcException(new IllegalArgumentException(
+              OperationLimits.getLimitMessage()));
         }
         
         if (sides < 1) {
@@ -68,6 +73,11 @@ public class DiceOperators {
         if (sides < 1) {
           throw new DiceCalcException(new IllegalArgumentException(
               "Dice must have at least one side."));
+        }
+        
+        if (OperationLimits.getLimit() == 0) {
+          throw new DiceCalcException(new IllegalArgumentException(
+              OperationLimits.getLimitMessage()));
         }
         
         return new DCDie(sides);
@@ -168,7 +178,14 @@ public class DiceOperators {
         
         ArrayList<DCValue> out = new ArrayList<>();
         
-        for (int i = 0; i < 50; i++) {
+        int limit = OperationLimits.getLimit();
+        
+        if (limit == 0) {
+          throw new DiceCalcException(new IllegalArgumentException(
+              OperationLimits.getLimitMessage()));
+        }
+        
+        for (int i = 0; i < limit; i++) {
           DCDie die = new DCDie(sides);
           if (comp.compares(die.getAmount(), cutoff)) {
             Functions.save2("_u", die);
