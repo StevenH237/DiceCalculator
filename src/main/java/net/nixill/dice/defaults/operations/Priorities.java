@@ -24,6 +24,11 @@ public final class Priorities {
   public static final int DICE = JOIN + 50;
   
   /**
+   * The priority of all keep/drop operators, which is 40.
+   */
+  public static final int KEEP_DROP = DICE - 10;
+  
+  /**
    * The priority of "p", which is 45. This level is right-associative.
    */
   public static final int PICK = DICE - 5;

@@ -105,4 +105,18 @@ public abstract class Operator {
   }
   
   public abstract String toString();
+  
+  public boolean equals(Object other) {
+    if (!other.getClass().equals(getClass())) {
+      return false;
+    }
+    
+    Operator oper = (Operator) other;
+    
+    return (oper.priority != priority) && (oper.symbol.equals(symbol));
+  }
+  
+  public int hashCode() {
+    return getClass().hashCode() + priority + symbol.hashCode();
+  }
 }

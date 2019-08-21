@@ -1,6 +1,5 @@
 package net.nixill.dice.defaults.operations;
 
-import java.rmi.server.Operation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;

@@ -74,6 +74,26 @@ public class ComparisonOperators<T extends DCValue> {
     NOT_MODULO = new ComparisonOperator(Comparison.NOT_MODULO);
   }
   
+  public boolean isMember(Object obj) {
+    try {
+      ComparisonOperator oper = (ComparisonOperator) obj;
+      return oper.getParent().equals(this);
+    } catch (ClassCastException ex) {
+      return false;
+    }
+  }
+  
+  public boolean equals(Object other) {
+    if (!other.getClass().equals(getClass())) {
+      return false;
+    }
+    
+    ComparisonOperators<?> oper = (ComparisonOperators<?>) other;
+    
+    return (oper.coPriority != coPriority)
+        && (oper.supersymbol.equals(supersymbol));
+  }
+  
   /**
    * The function of a ComparisonOperator, which accepts two
    * {@link DCEntity}s and a {@link Comparison} to produce a result.
@@ -176,6 +196,11 @@ public class ComparisonOperators<T extends DCValue> {
               return coFunc.run(left, comp, right);
             }
           });
+      
+    }
+    
+    public ComparisonOperators<T> getParent() {
+      return ComparisonOperators.this;
     }
   }
 }
