@@ -78,8 +78,35 @@ public class KeepDropOperators {
     if (count >= list.size() && !keep) {
       return new DCList(new ArrayList<>());
     }
-
-    // TODO here
-    ArrayList<DCValue> inVals = 
+    
+    // And if we're keeping everything or dropping nothing, the result is the input.
+    else if (count >= list.size() && keep) {
+      return list;
+    } else if (count <= 0 && !keep) {
+      return list;
+    }
+    
+    ArrayList<DCValue> dVals = list.getItems();
+    ArrayList<DCValue> kVals = new ArrayList<>();
+    
+    double now = Double.NaN;
+    boolean cont = true;
+    double next = Double.NaN;
+    
+    if (highest) {
+      next = Double.NEGATIVE_INFINITY;
+    } else {
+      next = Double.POSITIVE_INFINITY;
+    }
+    
+    while (count > 0) {
+      for (int i = 0; i < dVals.size() && count > 0; /* no autoincrement */) {
+        double val = dVals.get(i);
+        
+        if (val == now) {
+          
+        }
+      }
+    }
   }
 }
