@@ -1,6 +1,7 @@
 package net.nixill.dice.defaults.operations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import net.nixill.dice.objects.DCEntity;
 import net.nixill.dice.objects.DCList;
@@ -61,6 +62,19 @@ public class KeepDropOperators {
         return new DCList(vals);
       });
   
+  public static BinaryOperator<DCList> KEEP_HIGHEST = new BinaryOperator<>(
+      "kh", Priorities.KEEP_DROP, 2,
+      (left, right) -> keepDropByRank(left, right, true, true));
+  public static BinaryOperator<DCList> DROP_HIGHEST = new BinaryOperator<>(
+      "dh", Priorities.KEEP_DROP, 2,
+      (left, right) -> keepDropByRank(left, right, false, true));
+  public static BinaryOperator<DCList> KEEP_LOWEST  = new BinaryOperator<>(
+      "kl", Priorities.KEEP_DROP, 2,
+      (left, right) -> keepDropByRank(left, right, true, false));
+  public static BinaryOperator<DCList> DROP_LOWEST  = new BinaryOperator<>(
+      "dl", Priorities.KEEP_DROP, 2,
+      (left, right) -> keepDropByRank(left, right, false, false));
+  
   public static DCList keepDropByRank(DCEntity left, DCEntity right,
       boolean keep, boolean highest) {
     int count = (int) (right.getValue().getSingle().getAmount());
@@ -79,34 +93,63 @@ public class KeepDropOperators {
       return new DCList(new ArrayList<>());
     }
     
-    // And if we're keeping everything or dropping nothing, the result is the input.
-    else if (count >= list.size() && keep) {
-      return list;
-    } else if (count <= 0 && !keep) {
+    // Now, if we're dropping, invert the count. The count is what's in the
+    // "k" values list, but when we're dropping, we receive the "d" values
+    // list.
+    if (!keep) {
+      count = list.size() - count;
+    }
+    
+    // And if we're keeping everything or dropping nothing, the result is
+    // the input.
+    if (count >= list.size()) {
       return list;
     }
     
     ArrayList<DCValue> dVals = list.getItems();
-    ArrayList<DCValue> kVals = new ArrayList<>();
+    ArrayList<Boolean> keeps = new ArrayList<>(
+        Collections.nCopies(dVals.size(), false));
     
     double now = Double.NaN;
     boolean cont = true;
     double next = Double.NaN;
     
-    if (highest) {
-      next = Double.NEGATIVE_INFINITY;
-    } else {
-      next = Double.POSITIVE_INFINITY;
-    }
-    
     while (count > 0) {
-      for (int i = 0; i < dVals.size() && count > 0; /* no autoincrement */) {
-        double val = dVals.get(i);
+      if (highest) {
+        next = Double.NEGATIVE_INFINITY;
+      } else {
+        next = Double.POSITIVE_INFINITY;
+      }
+      
+      for (int i = 0; i < dVals.size() && count > 0; i += 1) {
+        DCValue val = dVals.get(i);
+        double amt = val.getSingle().getAmount();
         
-        if (val == now) {
-          
+        if (!keeps.get(i)) {
+          if (amt == now) {
+            keeps.set(i, true);
+            count -= 1;
+          } else {
+            if (highest) {
+              next = Math.max(next, amt);
+            } else {
+              next = Math.min(next, amt);
+            }
+          }
         }
       }
+      
+      now = next;
     }
+    
+    ArrayList<DCValue> out = new ArrayList<>();
+    
+    for (int i = 0; i < dVals.size(); i++) {
+      if (keeps.get(i) == keep) {
+        out.add(dVals.get(i));
+      }
+    }
+    
+    return new DCList(out);
   }
 }
