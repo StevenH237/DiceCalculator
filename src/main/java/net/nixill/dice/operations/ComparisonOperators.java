@@ -90,7 +90,7 @@ public class ComparisonOperators<T extends DCValue> {
     
     ComparisonOperators<?> oper = (ComparisonOperators<?>) other;
     
-    return (oper.coPriority != coPriority)
+    return (oper.coPriority == coPriority)
         && (oper.supersymbol.equals(supersymbol));
   }
   
