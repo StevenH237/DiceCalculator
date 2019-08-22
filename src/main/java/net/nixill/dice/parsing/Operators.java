@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.nixill.dice.defaults.operations.DiceOperators;
+import net.nixill.dice.defaults.operations.KeepDropOperators;
 import net.nixill.dice.defaults.operations.ListOperators;
 import net.nixill.dice.defaults.operations.MathsOperators;
 import net.nixill.dice.exception.UserInputException;
@@ -62,6 +63,12 @@ public class Operators {
     putOperator(DiceOperators.PICK);
     putOperator(DiceOperators.PICK_ONE);
     putOperator(DiceOperators.PICK_REPLACE);
+    
+    putOperator(KeepDropOperators.DROP_HIGHEST);
+    putOperator(KeepDropOperators.DROP_LOWEST);
+    putOperator(KeepDropOperators.KEEP_FIRST);
+    putOperator(KeepDropOperators.KEEP_HIGHEST);
+    putOperator(KeepDropOperators.KEEP_LOWEST);
     
     initRegexes();
   }
