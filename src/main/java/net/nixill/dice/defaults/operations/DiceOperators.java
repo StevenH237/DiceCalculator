@@ -179,6 +179,13 @@ public class DiceOperators {
         
         int limit = OperationLimits.getLimit();
         
+        try {
+          int limit2 = Integer.parseInt(Functions.getThread("ulimit"));
+          limit = Integer.min(limit, limit2);
+        } catch (NumberFormatException ex) {
+          // do nothing
+        }
+        
         if (limit == 0) {
           throw new DiceCalcException(new IllegalArgumentException(
               OperationLimits.getLimitMessage()));
