@@ -1,8 +1,8 @@
 package net.nixill.dice.operations;
 
 public class OperationLimits {
-  private static int perLineLimit;
-  private static int perOperLimit;
+  private static int perLineLimit = Integer.MAX_VALUE;
+  private static int perOperLimit = Integer.MAX_VALUE;
   
   private static ThreadLocal<Integer> perLineCount = ThreadLocal
       .withInitial(() -> {
