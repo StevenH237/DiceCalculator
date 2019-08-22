@@ -234,6 +234,17 @@ public class Functions {
    * @return The previous value, or <code>null</code> if none.
    */
   public static String setThread(String name, String value) {
-    return env.get().put(name, value);
+    if (value == null) {
+      return env.get().remove(name);
+    } else {
+      return env.get().put(name, value);
+    }
+  }
+  
+  /**
+   * Clears all thread variables.
+   */
+  public static void clearThread() {
+    env.remove();
   }
 }
