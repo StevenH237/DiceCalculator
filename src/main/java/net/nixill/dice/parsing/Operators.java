@@ -69,6 +69,8 @@ public class Operators {
     putOperator(KeepDropOperators.KEEP_FIRST);
     putOperator(KeepDropOperators.KEEP_HIGHEST);
     putOperator(KeepDropOperators.KEEP_LOWEST);
+    putOperator(KeepDropOperators.KEEP_COMPARISON);
+    putOperator(KeepDropOperators.DROP_COMPARISON);
     
     initRegexes();
   }
