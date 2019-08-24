@@ -74,6 +74,7 @@ public class ComparisonOperators<T extends DCValue> {
     NOT_MODULO = new ComparisonOperator(Comparison.NOT_MODULO);
   }
   
+  @SuppressWarnings("unchecked")
   public boolean isMember(Object obj) {
     try {
       ComparisonOperator oper = (ComparisonOperator) obj;

@@ -8,8 +8,10 @@ import net.nixill.dice.objects.DCList;
 import net.nixill.dice.objects.DCOperation;
 import net.nixill.dice.objects.DCValue;
 import net.nixill.dice.operations.BinaryOperator;
+import net.nixill.dice.operations.ComparisonOperators;
 import net.nixill.dice.operations.Functions;
 import net.nixill.dice.operations.Operator;
+import net.nixill.dice.operations.ComparisonOperators.Comparison;
 
 public class KeepDropOperators {
   /**
@@ -111,7 +113,6 @@ public class KeepDropOperators {
         Collections.nCopies(dVals.size(), false));
     
     double now = Double.NaN;
-    boolean cont = true;
     double next = Double.NaN;
     
     while (count > 0) {
@@ -151,5 +152,30 @@ public class KeepDropOperators {
     }
     
     return new DCList(out);
+  }
+  
+  // comparison operators!
+  public static ComparisonOperators<DCList> KEEP_COMPARISON = new ComparisonOperators<>(
+      "k", Priorities.KEEP_DROP, 2, (left, comp,
+          right) -> keepDropByComparison(left, comp, right, true));
+  public static ComparisonOperators<DCList> DROP_COMPARISON = new ComparisonOperators<>(
+      "d", Priorities.KEEP_DROP, 2, (left, comp,
+          right) -> keepDropByComparison(left, comp, right, false));
+  
+  public static DCList keepDropByComparison(DCEntity left, Comparison comp,
+      DCEntity right, boolean keep) {
+    ArrayList<DCValue> list = left.getValue().getList().getItems();
+    double value = right.getValue().getSingle().getAmount();
+    
+    for (int i = 0; i < list.size(); /* no autoincrement */) {
+      double lValue = list.get(i).getSingle().getAmount();
+      if ((comp.compares(lValue, value)) != keep) {
+        list.remove(i);
+      } else {
+        i += 1;
+      }
+    }
+    
+    return new DCList(list);
   }
 }
